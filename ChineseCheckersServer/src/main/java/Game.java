@@ -1,9 +1,21 @@
+import javax.swing.*;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
+import java.util.*;
 
 class Game {
+
+    private static List<Player> players = new ArrayList<Player>();
+    private int playersNumber;
+    int rnd;
+    Player currentPlayer;
+
+    public Game(int playersNumber) {
+        this.playersNumber = playersNumber;
+        rnd = (new Random().nextInt(playersNumber)) - 1;
+    }
 
     class Player implements Runnable {
         int playerId;
@@ -21,7 +33,8 @@ class Game {
         public void run() {
             try {
                 setup();
-                //TODO: processCommands();
+                selectFirstPlayer();
+                processCommands();
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
@@ -35,6 +48,36 @@ class Game {
         private void setup() throws IOException {
             input = new Scanner(socket.getInputStream());
             output = new PrintWriter(socket.getOutputStream(), true);
+            players.add(this);
+            while (true) {
+                if (players.size() == playersNumber) {
+                    for (Player player : players) {
+                        player.output.println("START");
+                    }
+                    break;
+                }
+            }
+        }
+
+        private void selectFirstPlayer () {
+            for (int i = 0; i<players.size(); i++) {
+                if(i == rnd)
+                {
+                    currentPlayer = this;
+                }
+                players.get(i).output.println("PLAYER It's player's " + rnd + "turn!");
+            }
+        }
+
+        private void processCommands() {
+            while (input.hasNextLine()) {
+                var command = input.nextLine();
+                if (command.startsWith("MOVE")) {
+                    return;
+                }
+            }
         }
     }
-}
+
+
+    }

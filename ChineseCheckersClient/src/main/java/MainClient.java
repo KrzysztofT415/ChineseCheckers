@@ -1,3 +1,4 @@
+
 import java.net.InetAddress;
 import java.util.Scanner;
 import java.io.PrintWriter;
@@ -9,6 +10,7 @@ public class MainClient {
     private final Scanner in;
     private final PrintWriter out;
 
+
     public MainClient() throws Exception {
 
         socket = new Socket(InetAddress.getLocalHost(), 58901);
@@ -17,11 +19,17 @@ public class MainClient {
 
     }
 
+
+
     public void play() throws Exception {
         try {
             while (in.hasNextLine()) {
-                //TODO: implement game mechanic
+                var response = in.nextLine();
+                if (response.startsWith("START")) {
+                    break;
+                }
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

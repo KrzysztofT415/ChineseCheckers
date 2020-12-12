@@ -12,12 +12,17 @@ public class MainServer {
         int numberOfPlayers;
         try {
             numberOfPlayers = Integer.parseInt(args[0]);
+            if (numberOfPlayers != 2 || numberOfPlayers != 3 || numberOfPlayers != 4 || numberOfPlayers != 6)
+            {
+                System.out.println("Wrong number of players");
+                return;
+            }
             try (var listener = new ServerSocket(58901)) {
                 System.out.println("Chinese Checkers Server is Running...");
 
                 var pool = Executors.newFixedThreadPool(numberOfPlayers);
 
-                Game game = new Game();
+                Game game = new Game(numberOfPlayers);
                 System.out.println("New game created - lobby size : " + numberOfPlayers);
 
                 for (int i = 1; i <= numberOfPlayers; i++) {
