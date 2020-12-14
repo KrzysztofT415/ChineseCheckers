@@ -1,9 +1,21 @@
+import boards.GameBoard;
+import boards.StandardBoard;
+
 import java.net.ServerSocket;
 import java.util.concurrent.Executors;
 
 public class MainServer {
 
     public static void main(String[] args) throws Exception {
+//        Test for generating board: (prints gameInfo to paste into client)
+//        GameBoard board = new StandardBoard();
+//        board.placePlayers(2);
+//        int[][] in = board.asGameInfo();
+//        for (int[] ints : in) {
+//            System.out.printf("{%d,%d,%d},",ints[0],ints[1],ints[2]);
+//        }
+//        System.out.println();
+
         if (args.length != 1) {
             System.out.println("Wrong number of arguments");
             return;

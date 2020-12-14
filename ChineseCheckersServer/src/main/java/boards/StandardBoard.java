@@ -6,6 +6,7 @@ public class StandardBoard implements GameBoard {
 
     private final Cell[] centerCells;
     private final Cell[][] cornerCells;
+    private int[] playerPlacing;
 
     public StandardBoard() {
 
@@ -93,27 +94,53 @@ public class StandardBoard implements GameBoard {
 
     @Override
     public void placePlayers(int numberOfPlayers) {
-        int[] placings;
         switch (numberOfPlayers) {
             case 2:
-                placings = new int[] {0,3};
+                playerPlacing = new int[] {0,3};
                 break;
             case 3:
-                placings = new int[] {0,2,4};
+                playerPlacing = new int[] {0,2,4};
                 break;
             case 4:
-                placings = new int[] {1,2,4,5};
+                playerPlacing = new int[] {1,2,4,5};
                 break;
             default:
-                placings = new int[] {0,1,2,3,4,5};
+                playerPlacing = new int[] {0,1,2,3,4,5};
                 break;
         }
 
-        for (int i = 0; i < placings.length; i++) {
-            for (Cell cornerCell : cornerCells[placings[i]]) {
+        for (int i = 0; i < playerPlacing.length; i++) {
+            for (Cell cornerCell : cornerCells[playerPlacing[i]]) {
                 cornerCell.setCellState(i + 1);
             }
         }
+    }
+
+    @Override
+    public int hasWinner() {
+        for (int i = 0; i < playerPlacing.length; i++) {
+            for (Cell cell : cornerCells[(playerPlacing[i] + 3) % 6]) {
+                if (cell.getCellState() != i + 1) {
+                    break;
+                }
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public int[][] asGameInfo() {
+        ArrayList<int[]> cellInfo = new ArrayList<>();
+        for (Cell cell : centerCells) {
+            cellInfo.add(new int[] {cell.getX(), cell.getY(), cell.getCellState()});
+        }
+        for (Cell[] corner : cornerCells) {
+            for (Cell cell : corner) {
+                cellInfo.add(new int[] {cell.getX(), cell.getY(), cell.getCellState()});
+            }
+        }
+        return cellInfo.toArray(new int[0][]);
     }
 
 }

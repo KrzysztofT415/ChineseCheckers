@@ -5,4 +5,6 @@ public interface GameBoard {
     int getCellState(int x, int y);
     void setCellState(int x, int y, int newState);
     void placePlayers(int numberOfPlayers);
-}
+    int hasWinner();
+    int[][] asGameInfo();
+    }

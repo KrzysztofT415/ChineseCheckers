@@ -52,7 +52,10 @@ class Game {
             while (true) {
                 if (players.size() == playersNumber) {
                     for (Player player : players) {
-                        player.output.println("START");
+                        String gameInfo = "";
+                        //TODO:
+                        // board.asGameInfo =>  length;x1;y1;state1;x2;y2;state2;x3...
+                        player.output.println("START " + gameInfo);
                     }
                     break;
                 }
@@ -78,6 +81,4 @@ class Game {
             }
         }
     }
-
-
-    }
+}
