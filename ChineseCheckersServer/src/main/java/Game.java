@@ -1,6 +1,8 @@
 import boards.*;
+import games.GameContext;
+import games.StandardGameContext;
 import rules.*;
-import javax.swing.*;
+
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
@@ -13,7 +15,7 @@ class Game {
     private int playersNumber;
     int rnd;
     Player currentPlayer;
-    GameBoard board = new StandardBoard();
+    GameContext gameContext = new StandardGameContext();
 
     public Game(int playersNumber) {
         this.playersNumber = playersNumber;
@@ -120,7 +122,7 @@ class Game {
 
                     if (this == currentPlayer) {
 
-                        if (board.getCellState(chosenX, chosenY) == currentPlayer.playerId) {
+                        if (gameContext.getBoard().getCellState(chosenX, chosenY) == currentPlayer.playerId) {
                             //checkMoves(chosenX, chosenY, playerId);
 
                         } else {
@@ -157,11 +159,11 @@ class Game {
 
             GameRule rule = new MoveOneRule();
             Cell currentCell = new Cell(x, y, playerId);
-            Iterator iterator = new RulesIterator(rule.getPossibleMoves(currentCell, board));
+            Iterator iterator = new RulesIterator(rule.getPossibleMoves(currentCell, gameContext.getBoard()));
             while(iterator.hasNext()) {
                 Change c = (Change)iterator.next();
                 if(c.getX() == newX && c.getY() == newY) {
-                    board.getCell(chosenX, chosenY).setCellState(currentPlayer.playerId);
+                    gameContext.getBoard().getCell(chosenX, chosenY).setCellState(currentPlayer.playerId);
                     break;
                 }
             }
