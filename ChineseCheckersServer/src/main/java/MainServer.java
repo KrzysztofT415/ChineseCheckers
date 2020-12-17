@@ -24,7 +24,7 @@ public class MainServer {
         int numberOfPlayers;
         try {
             numberOfPlayers = Integer.parseInt(args[0]);
-            if (numberOfPlayers != 2 || numberOfPlayers != 3 || numberOfPlayers != 4 || numberOfPlayers != 6)
+            if (numberOfPlayers != 2 && numberOfPlayers != 3 && numberOfPlayers != 4 && numberOfPlayers != 6)
             {
                 System.out.println("Wrong number of players");
                 return;
@@ -34,16 +34,17 @@ public class MainServer {
 
                 var pool = Executors.newFixedThreadPool(numberOfPlayers);
 
-                Game game = new Game(numberOfPlayers);
-                System.out.println("New game created - lobby size : " + numberOfPlayers);
+                while (true) { //tu musi byc ten while!!!
+                    Game game = new Game(numberOfPlayers);
+                    System.out.println("New game created - lobby size : " + numberOfPlayers);
 
-                for (int i = 1; i <= numberOfPlayers; i++) {
-                    System.out.println("Waiting for player " + i);
-                    pool.execute(game.new Player(listener.accept(), (char) i));
-                    System.out.println("Player " + i + " joined");
+                    for (int i = 1; i <= numberOfPlayers; i++) {
+                        System.out.println("Waiting for player " + i);
+                        pool.execute(game.new Player(listener.accept(), i));
+                        System.out.println("Player " + i + " joined");
+                    }
                 }
-
-                System.out.println("All players are in lobby - game starting");
+                //System.out.println("All players are in lobby - game starting");
             }
 
         } catch (NumberFormatException e) {
