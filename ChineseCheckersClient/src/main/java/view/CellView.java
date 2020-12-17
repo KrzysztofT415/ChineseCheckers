@@ -8,7 +8,7 @@ public class CellView extends Polygon {
     private final int y;
     private final int q;
     private final int r;
-    private ColorPalette colorState;
+    private CellState colorState;
 
     /*
     cellStates:
@@ -17,7 +17,7 @@ public class CellView extends Polygon {
      7 > possible to move into
      */
 
-    public CellView(int x, int y, int q, int r, int cellState) {
+    public CellView(int x, int y, int q, int r, int cellState, int radius) {
         this.x = x;
         this.y = y;
         this.q = q;
@@ -27,8 +27,8 @@ public class CellView extends Polygon {
         for (int i = 0; i < 6; ++i) {
             int angle_deg = 60 * i - 30;
             double angle_rad = Math.PI / 180 * angle_deg;
-            double x1 = x + BoardView.RADIUS * (Math.cos(angle_rad));
-            double y1 = y + BoardView.RADIUS * (Math.sin(angle_rad));
+            double x1 = x + radius * (Math.cos(angle_rad));
+            double y1 = y + radius * (Math.sin(angle_rad));
             this.addPoint((int) x1, (int) y1);
         }
 
@@ -55,35 +55,35 @@ public class CellView extends Polygon {
         return colorState.getColor();
     }
 
-    public ColorPalette getColorState() {
+    public CellState getColorState() {
         return colorState;
     }
 
     public void setCellState(int cellState) {
         switch (cellState) {
             case 0:
-                this.colorState = ColorPalette.EMPTY;
+                this.colorState = CellState.EMPTY;
                 break;
             case 1:
-                this.colorState = ColorPalette.PLAYER1;
+                this.colorState = CellState.PLAYER1;
                 break;
             case 2:
-                this.colorState = ColorPalette.PLAYER2;
+                this.colorState = CellState.PLAYER2;
                 break;
             case 3:
-                this.colorState = ColorPalette.PLAYER3;
+                this.colorState = CellState.PLAYER3;
                 break;
             case 4:
-                this.colorState = ColorPalette.PLAYER4;
+                this.colorState = CellState.PLAYER4;
                 break;
             case 5:
-                this.colorState = ColorPalette.PLAYER5;
+                this.colorState = CellState.PLAYER5;
                 break;
             case 6:
-                this.colorState = ColorPalette.PLAYER6;
+                this.colorState = CellState.PLAYER6;
                 break;
             case 7:
-                this.colorState = ColorPalette.POSSIBLE_MOVE;
+                this.colorState = CellState.POSSIBLE_MOVE;
                 break;
         }
     }
