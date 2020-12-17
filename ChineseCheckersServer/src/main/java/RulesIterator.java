@@ -1,6 +1,11 @@
+import boards.Cell;
+import boards.GameBoard;
 import rules.Change;
+import rules.GameRule;
+import java.util.ArrayList;
 
 public class RulesIterator implements Iterator{
+
     Change[] possibleMoves;
     int i = 0;
 
@@ -9,7 +14,7 @@ public class RulesIterator implements Iterator{
         this.possibleMoves = possibleMoves;
     }
 
-    public Object next()
+    public Change next()
     {
         Change change =  possibleMoves[i];
         i++;
@@ -23,4 +28,5 @@ public class RulesIterator implements Iterator{
         else
             return true;
     }
+
 }

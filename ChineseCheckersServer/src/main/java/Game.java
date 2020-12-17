@@ -17,7 +17,7 @@ class Game {
     int rnd;
     Player currentPlayer;
     GameContext gameContext = new StandardGameContext();
-    int[][] possibleMoves;
+    Change[] possibleMoves;
 
     public Game(int playersNumber) {
         this.playersNumber = playersNumber;
@@ -137,8 +137,8 @@ class Game {
                         if (isPawnOwner(chosenX, chosenY, this.playerId)) {
                             oldX = chosenX;
                             oldY = chosenY;
-                            Change[] tab = createRulesTable();
-                            String info = infoToString(tab);
+                            possibleMoves = createRulesTable(oldX, oldY, this.playerId);
+                            String info = infoToString(possibleMoves);
                             output.println("INFO " + info);
 
                         } else {
@@ -175,17 +175,23 @@ class Game {
 
             Cell currentCell = new Cell(oldX, oldY, playerId);
 
-            Iterator iterator = new RulesIterator(); //
-            while (iterator.hasNext()) {
-                Change c = (Change) iterator.next();
-                if (c.getX() == newX && c.getY() == newY) {
-                    gameContext.getBoard().getCell(newX, newY).setCellState(currentPlayer.playerId);
-                    gameContext.getBoard().getCell(oldX, oldY).setCellState(0);
-                    for (Player player : players) {
-                        player.output.println("PLAYER_MOVED " + newX + ";" + newY + ";" + currentPlayer.playerId);
+            Iterator gameRulesIterator = new GameRulesIterator(gameContext.getRules());
+            {
+                while (gameRulesIterator.hasNext()) {
+                    GameRule gameRule = (GameRule) gameRulesIterator.next();
+                    Iterator iterator = new RulesIterator(gameRule.getPossibleMoves(currentCell, gameContext.getBoard()));
+                    while (iterator.hasNext()) {
+                        Change c = (Change) iterator.next();
+                        if (c.getX() == newX && c.getY() == newY) {
+                            gameContext.getBoard().getCell(newX, newY).setCellState(currentPlayer.playerId);
+                            gameContext.getBoard().getCell(oldX, oldY).setCellState(0);
+                            for (Player player : players) {
+                                player.output.println("PLAYER_MOVED " + newX + ";" + newY + ";" + currentPlayer.playerId);
+                            }
+                            sendResults(this);
+                            break;
+                        }
                     }
-                    sendResults(this);
-                    break;
                 }
             }
 
@@ -231,9 +237,19 @@ class Game {
             return result;
         }
 
-        Change[] createRulesTable() {
-            GameRule[] gameRule = gameContext.getRules();
-            //
+        Change[] createRulesTable(int x, int y, int state) {
+            Cell currentCell = new Cell(x,y,state);
+            ArrayList<Change> moves = new ArrayList<Change>();
+            Iterator gameRulesIterator = new GameRulesIterator(gameContext.getRules());
+                while (gameRulesIterator.hasNext()) {
+                    GameRule gameRule = (GameRule) gameRulesIterator.next();
+                    Iterator iterator = new RulesIterator(gameRule.getPossibleMoves(currentCell, gameContext.getBoard()));
+                    while (iterator.hasNext()) {
+                        Change change = (Change) iterator.next();
+                        moves.add(change);
+                    }
+                }
+                return moves.toArray(new Change[0]);
         }
     }
 
