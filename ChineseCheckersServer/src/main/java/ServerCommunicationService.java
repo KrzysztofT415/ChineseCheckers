@@ -11,7 +11,7 @@ public class ServerCommunicationService {
 
     private final int playerId;
     private final Game game;
-    private int oldX = -1, oldY = -1;
+    private Integer oldX = null, oldY = null;
     private Change[] possibleMoves;
 
     private Scanner in;
@@ -49,8 +49,8 @@ public class ServerCommunicationService {
                 if (game.getCurrentPlayerId() == playerId) {
                     game.resend("MESSAGE Player "+playerId+" passed his turn", playerId);
                     this.out.println("MESSAGE You Passed");
-                    this.oldX = -1;
-                    this.oldY = -1;
+                    this.oldX = null;
+                    this.oldY = null;
                     this.possibleMoves = null;
                     this.game.nextPlayer();
                 } else {
@@ -99,12 +99,12 @@ public class ServerCommunicationService {
                 this.out.println("CLEAR");
                 this.out.println("MESSAGE Move saved");
                 this.checkWinner();
-                this.oldX = -1;
-                this.oldY = -1;
+                this.oldX = null;
+                this.oldY = null;
                 this.game.nextPlayer();
             } else {
-                this.oldX = -1;
-                this.oldY = -1;
+                this.oldX = null;
+                this.oldY = null;
                 this.out.println("CLEAR");
                 this.processMoveCommand(chosenX, chosenY);
             }
