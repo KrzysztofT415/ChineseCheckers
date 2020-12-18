@@ -1,5 +1,6 @@
 
 import view.BoardView;
+import view.CellState;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +17,6 @@ public class MainClient extends JFrame {
     private BoardView boardView;
 
     public MainClient() {
-        super("Chinese Checkers - player");
-
         try {
             this.socket = new Socket(InetAddress.getLocalHost(), 58901);
         } catch (Exception e) {
@@ -45,8 +44,10 @@ public class MainClient extends JFrame {
         this.add(passButton, BorderLayout.EAST);
         this.add(closeButton, BorderLayout.NORTH);
 
-        this.setSize(720, 720);
-        this.setUndecorated(true);
+        this.setTitle("Chinese Checkers - player");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(820, 820);
+        this.setResizable(false);
         this.setVisible(true);
     }
 
@@ -64,6 +65,12 @@ public class MainClient extends JFrame {
 
         this.boardView = boardView;
         this.boardViewContainer.add(boardView);
+        this.boardView.repaint();
+    }
+
+    public void setPlayer(int playerId) {
+        this.setTitle(this.getTitle() + playerId);
+        this.messageLabel.setForeground(CellState.getColorById(playerId));
     }
 
     public void start() throws Exception {
@@ -73,6 +80,7 @@ public class MainClient extends JFrame {
             e.printStackTrace();
         } finally {
             socket.close();
+            this.dispose();
         }
     }
 

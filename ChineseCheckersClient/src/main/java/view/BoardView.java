@@ -64,6 +64,16 @@ public class BoardView extends JPanel {
         }
     }
 
+    public void removePossibleMoves() {
+        System.out.println("removed");
+        for (CellView cell : allCells) {
+            if (cell.getColorState() == CellState.POSSIBLE_MOVE) {
+                cell.setCellState(0);
+                this.paintCell(cell, (Graphics2D) this.getGraphics());
+            }
+        }
+    }
+
     public int getBoardWidth() {
         return BOARD_WIDTH;
     }

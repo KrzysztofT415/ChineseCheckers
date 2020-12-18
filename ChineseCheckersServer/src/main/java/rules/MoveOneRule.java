@@ -5,7 +5,7 @@ import boards.GameBoard;
 
 import java.util.ArrayList;
 
-public class MoveOneRule implements GameRule {
+public class MoveOneRule implements MoveRule {
     @Override
     public Change[] getPossibleMoves(Cell currentCell, GameBoard board) {
 

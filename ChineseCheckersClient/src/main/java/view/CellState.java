@@ -20,4 +20,27 @@ public enum CellState {
     public Color getColor() {
         return color;
     }
+
+    public static Color getColorById(int id) {
+        switch (id) {
+            case 0:
+                return EMPTY.getColor();
+            case 1:
+                return PLAYER1.getColor();
+            case 2:
+                return PLAYER2.getColor();
+            case 3:
+                return PLAYER3.getColor();
+            case 4:
+                return PLAYER4.getColor();
+            case 5:
+                return PLAYER5.getColor();
+            case 6:
+                return PLAYER6.getColor();
+            case 7:
+                return POSSIBLE_MOVE.getColor();
+            default:
+                return Color.WHITE;
+        }
+    }
 }

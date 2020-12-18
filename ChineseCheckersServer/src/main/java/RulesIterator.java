@@ -1,8 +1,4 @@
-import boards.Cell;
-import boards.GameBoard;
 import rules.Change;
-import rules.GameRule;
-import java.util.ArrayList;
 
 public class RulesIterator implements Iterator{
 
@@ -23,10 +19,7 @@ public class RulesIterator implements Iterator{
 
     public boolean hasNext()
     {
-        if (i >= possibleMoves.length || possibleMoves[i] == null)
-            return false;
-        else
-            return true;
+        return i < possibleMoves.length && possibleMoves[i] != null;
     }
 
 }

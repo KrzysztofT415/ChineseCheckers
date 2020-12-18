@@ -1,3 +1,5 @@
+import view.CellState;
+
 import javax.swing.*;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -7,6 +9,7 @@ import java.util.Scanner;
 public class ClientCommunicationService {
 
     private final MainClient mainClient;
+    private int playerId;
 
     private Scanner in;
     private PrintWriter out;
@@ -37,25 +40,34 @@ public class ClientCommunicationService {
     }
 
     public void start() {
+        String response = in.nextLine();
+        System.out.println(response);
+        this.playerId = Integer.parseInt(response.substring(8));
+        this.mainClient.setPlayer(playerId);
         while (in.hasNextLine()) {
-            String response = in.nextLine();
+            response = in.nextLine();
+            System.out.println(response);
 
             if (response.startsWith("START")) {
                 int[][] gameInfo = this.resolveParameters(response.substring(6));
-                
-                mainClient.setStartingBoard(gameInfo);
+
+                this.mainClient.setStartingBoard(gameInfo);
             }
 
             else if (response.startsWith("SET")) {
                 int[][] gameInfo = this.resolveParameters(response.substring(4));
 
                 for (int[] change : gameInfo) {
-                    mainClient.getBoardView().updateCellState(change[0], change[1], change[2]);
+                    this.mainClient.getBoardView().updateCellState(change[0], change[1], change[2]);
                 }
             }
 
+            else if (response.startsWith("CLEAR")) {
+                this.mainClient.getBoardView().removePossibleMoves();
+            }
+
             else if (response.startsWith("MESSAGE")) {
-                mainClient.setMessageLabel(response.substring(8));
+                this.mainClient.setMessageLabel(response.substring(8));
             }
 
             else if (response.startsWith("LOST")) {
@@ -67,15 +79,21 @@ public class ClientCommunicationService {
                 JOptionPane.showMessageDialog(null, "You won!");
                 break;
             }
+
+            else if (response.startsWith("LEAVE")) {
+                JOptionPane.showMessageDialog(null, "Someone left the game");
+                break;
+            }
         }
-        out.println("QUIT");
+        this.out.println("QUIT");
     }
 
     public void sendClick(int x, int y) {
-        out.println("CLICK "+x+";"+y);
+        this.out.println("CLICK "+x+";"+y);
     }
 
     public void send(String message) {
-        out.println(message);
+        this.out.println(message);
     }
+
 }

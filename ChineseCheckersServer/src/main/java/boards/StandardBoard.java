@@ -1,7 +1,5 @@
 package boards;
 
-import java.util.ArrayList;
-
 public class StandardBoard implements GameBoard {
 
     private final Cell[] centerCells;
@@ -9,57 +7,32 @@ public class StandardBoard implements GameBoard {
     private int[] playerPlacing;
 
     public StandardBoard() {
-
-        ArrayList<Cell> cellsStack = new ArrayList<>();
+        this.centerCells = new Cell[61];
 
         // Generating empty center
         int r = 4;
+        int pointer = -1;
         for (int x = -r; x <= r; x++) {
             for (int y = -r; y <= r; y++) {
                 for (int z = -r; z <= r; z++) {
                     if (x + y + z == 0) {
-                        cellsStack.add(new Cell(x, z, 0));
+                        this.centerCells[++pointer] = new Cell(x, z, 0);
                     }
                 }
             }
         }
-        this.centerCells = cellsStack.toArray(new Cell[0]);
-        cellsStack.clear();
 
         //Generating empty corners
         this.cornerCells = new Cell[6][10];
         int[][] elements = new int[][] { {1,4,-5}, {2,3,-5}, {3,2,-5}, {4,1,-5}, {2,4,-6}, {3,3,-6}, {4,2,-6}, {3,4,-7}, {4,3,-7}, {4,4,-8} };
 
-        for (int i = 0; i < 6; i++) {
-            for (int[] element : elements) {
-
-                Cell newCell;
-                switch (i) {
-                    case 0:
-                        newCell = new Cell(element[0], element[2], 0);
-                        break;
-                    case 1:
-                        newCell = new Cell(-element[1], -element[0], 0);
-                        break;
-                    case 2:
-                        newCell = new Cell(element[2], element[1], 0);
-                        break;
-                    case 3:
-                        newCell = new Cell(-element[0], -element[2], 0);
-                        break;
-                    case 4:
-                        newCell = new Cell(element[1], element[0], 0);
-                        break;
-                    default:
-                        newCell = new Cell(-element[2], -element[1], 0);
-                        break;
-                }
-
-                cellsStack.add(newCell);
-            }
-
-            this.cornerCells[i] = cellsStack.toArray(new Cell[0]);
-            cellsStack.clear();
+        for (int i = 0; i < elements.length; i++) {
+            this.cornerCells[0][i] = new Cell(elements[i][0], elements[i][2], 0);
+            this.cornerCells[1][i] = new Cell(-elements[i][1], -elements[i][0], 0);
+            this.cornerCells[2][i] = new Cell(elements[i][2], elements[i][1], 0);
+            this.cornerCells[3][i] = new Cell(-elements[i][0], -elements[i][2], 0);
+            this.cornerCells[4][i] = new Cell(elements[i][1], elements[i][0], 0);
+            this.cornerCells[5][i] = new Cell(-elements[i][2], -elements[i][1], 0);
         }
     }
 
@@ -82,9 +55,24 @@ public class StandardBoard implements GameBoard {
         return null;
     }
 
+    public int getCorner(Cell searchedCell) {
+        for (int i = 0; i < 6; i++) {
+            for (Cell cell : cornerCells[i]) {
+                if (cell == searchedCell) {
+                    return i;
+                }
+            }
+        }
+        return 0;
+    }
+
     @Override
     public int getCellState(int x, int y) {
-        return this.getCell(x, y).getCellState();
+        Cell chosenCell = this.getCell(x, y);
+        if (chosenCell == null) {
+            return -1;
+        }
+        return chosenCell.getCellState();
     }
 
     @Override
@@ -117,30 +105,29 @@ public class StandardBoard implements GameBoard {
     }
 
     @Override
-    public int hasWinner() {
-        for (int i = 0; i < playerPlacing.length; i++) {
-            for (Cell cell : cornerCells[(playerPlacing[i] + 3) % 6]) {
-                if (cell.getCellState() != i + 1) {
-                    break;
-                }
-                return i;
+    public boolean isWinner(int playerId) {
+        for (Cell cell : cornerCells[(playerPlacing[playerId - 1] + 3) % 6]) {
+            if (cell.getCellState() != playerId) {
+                return false;
             }
         }
-        return 0;
+        return true;
     }
 
     @Override
     public int[][] asGameInfo() {
-        ArrayList<int[]> cellInfo = new ArrayList<>();
+        int[][] gameInfo = new int[121][3];
+
+        int pointer = -1;
         for (Cell cell : centerCells) {
-            cellInfo.add(new int[] {cell.getX(), cell.getY(), cell.getCellState()});
+            gameInfo[++pointer] = new int[] {cell.getX(), cell.getY(), cell.getCellState()};
         }
         for (Cell[] corner : cornerCells) {
             for (Cell cell : corner) {
-                cellInfo.add(new int[] {cell.getX(), cell.getY(), cell.getCellState()});
+                gameInfo[++pointer] = new int[] {cell.getX(), cell.getY(), cell.getCellState()};
             }
         }
-        return cellInfo.toArray(new int[0][]);
-    }
 
+        return gameInfo;
+    }
 }

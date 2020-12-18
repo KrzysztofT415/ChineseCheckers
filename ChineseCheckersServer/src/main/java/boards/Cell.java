@@ -6,19 +6,12 @@ public class Cell {
 
     private final int x;
     private final int y;
-    private int cellState;
+    private CellState cellState;
 
-    /*
-    cellStates:
-     0 > empty
-     1-6 > occupied by according player
-     7 > possible to move into
-     */
-
-    public Cell(int x, int y, int cellState) {
+    public Cell(int x, int y, int cellStateId) {
         this.x = x;
         this.y = y;
-        this.cellState = cellState;
+        this.setCellState(cellStateId);
     }
 
     public int getX() {
@@ -30,10 +23,32 @@ public class Cell {
     }
 
     public int getCellState() {
-        return cellState;
+        return cellState.getCellStateId();
     }
 
-    public void setCellState(int cellState) {
-        this.cellState = cellState;
+    public void setCellState(int cellStateId) {
+        switch (cellStateId) {
+            case 0:
+                this.cellState = CellState.EMPTY;
+                break;
+            case 1:
+                this.cellState = CellState.PLAYER1;
+                break;
+            case 2:
+                this.cellState = CellState.PLAYER2;
+                break;
+            case 3:
+                this.cellState = CellState.PLAYER3;
+                break;
+            case 4:
+                this.cellState = CellState.PLAYER4;
+                break;
+            case 5:
+                this.cellState = CellState.PLAYER5;
+                break;
+            case 6:
+                this.cellState = CellState.PLAYER6;
+                break;
+        }
     }
 }
