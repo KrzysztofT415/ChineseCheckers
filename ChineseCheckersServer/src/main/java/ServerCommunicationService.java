@@ -65,7 +65,7 @@ public class ServerCommunicationService {
 
     private void processMoveCommand(int chosenX, int chosenY) {
 
-        if (this.oldX == -1 && this.oldY == -1) {
+        if (this.oldX == null && this.oldY == null) {
             if (this.game.getGameContext().getBoard().getCellState(chosenX, chosenY) != playerId) {
                 return;
             }
@@ -114,7 +114,8 @@ public class ServerCommunicationService {
 
     private Change[] getPossibleMoves(int chosenX, int chosenY) {
         //TODO : get all possible moves
-        return (new MoveOneRule()).getPossibleMoves(this.game.getGameContext().getBoard().getCell(chosenX, chosenY), this.game.getGameContext().getBoard());
+//        return (new MoveOneRule()).getPossibleMoves(this.game.getGameContext().getBoard().getCell(chosenX, chosenY), this.game.getGameContext().getBoard());
+        return (new SmallJumpRule()).getPossibleMoves(this.game.getGameContext().getBoard().getCell(chosenX, chosenY), this.game.getGameContext().getBoard());
     }
 
     private String changesInfoToString(Change[] info) {

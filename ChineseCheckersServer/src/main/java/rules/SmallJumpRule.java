@@ -5,13 +5,17 @@ import boards.GameBoard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 
-public class SmallJumpRule implements MoveRule {
+public class SmallJumpRule implements MoveRuleChainable {
+
     @Override
     public Change[] getPossibleMoves(Cell currentCell, GameBoard board) {
+        return this.getPossibleMoves(currentCell, board, new Change[]{new Change(currentCell.getX(), currentCell.getY(), currentCell.getCellState())});
+    }
 
-        ArrayList<Change> possibleMoves = new ArrayList<>();
+    @Override
+    public Change[] getPossibleMoves(Cell currentCell, GameBoard board, Change[] possibleMovesStack) {
+        ArrayList<Change> possibleMoves = new ArrayList<>(Arrays.asList(possibleMovesStack));
 
         for (int[] direction : Cell.directions) {
             int x = currentCell.getX() + direction[0];
@@ -20,9 +24,9 @@ public class SmallJumpRule implements MoveRule {
             if (board.getCellState(x, y) != 0 && board.getCellState(x, y) != -1) {
                 Cell destinationCell = board.getCell(x + direction[0], y + direction[1]);
                 if (destinationCell != null) {
-                    if (!isCounted(destinationCell, possibleMoves) && destinationCell.getCellState() != 0) {
+                    if (!isCounted(destinationCell, possibleMoves) && destinationCell.getCellState() == 0) {
                         possibleMoves.add(new Change(x + direction[0], y + direction[1], 7));
-                        Change[] furtherMoves = this.getPossibleMoves(destinationCell, board);
+                        Change[] furtherMoves = this.getPossibleMoves(destinationCell, board, possibleMoves.toArray(new Change[0]));
                         possibleMoves.addAll(Arrays.asList(furtherMoves));
                     }
                 }
