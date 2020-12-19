@@ -17,6 +17,7 @@ class Player implements Runnable {
         this.communicationService.send("WELCOME "+this.playerId);
         this.communicationService.start();
         this.game.resend("LEAVE", playerId);
+        System.exit(1);
     }
 
     public int getPlayerId() {

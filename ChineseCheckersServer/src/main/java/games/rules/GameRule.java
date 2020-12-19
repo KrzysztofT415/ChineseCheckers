@@ -1,3 +1,3 @@
-package rules;
+package games.rules;
 
 public interface GameRule {}

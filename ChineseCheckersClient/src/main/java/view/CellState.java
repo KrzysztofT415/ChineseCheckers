@@ -9,7 +9,7 @@ public enum CellState {
     PLAYER3(new Color(241,143,1)),
     PLAYER4(new Color(33,78,52)),
     PLAYER5(new Color(171,54,143)),
-    PLAYER6(new Color(47,37,4)),
+    PLAYER6(new Color(120, 84, 61)),
     POSSIBLE_MOVE(new Color(255,236,81));
 
     private final Color color;

@@ -1,4 +1,4 @@
-import rules.*;
+import games.rules.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -64,7 +64,7 @@ public class ServerCommunicationService {
 
     private void processMoveCommand(int chosenX, int chosenY) {
 
-        if (this.oldX == null && this.oldY == null) {
+        if (this.oldX == null || this.oldY == null) {
             if (this.game.getGameContext().getBoard().getCellState(chosenX, chosenY) != playerId) {
                 return;
             }
@@ -80,6 +80,13 @@ public class ServerCommunicationService {
             oldX = chosenX;
             oldY = chosenY;
         } else {
+
+            if (oldX == chosenX && oldY == chosenY) {
+                this.oldX = null;
+                this.oldY = null;
+                this.out.println("CLEAR");
+                return;
+            }
 
             boolean move = false;
             for (Change possibleMove : possibleMoves) {
@@ -129,9 +136,6 @@ public class ServerCommunicationService {
             }
         }
         return list.toArray(new Change[0]);
-
-//        return (new MoveOneRule()).getPossibleMoves(this.game.getGameContext().getBoard().getCell(chosenX, chosenY), this.game.getGameContext().getBoard());
-//        return (new SmallJumpRule()).getPossibleMoves(this.game.getGameContext().getBoard().getCell(chosenX, chosenY), this.game.getGameContext().getBoard());
     }
 
     private String changesInfoToString(Change[] info) {
@@ -157,68 +161,5 @@ public class ServerCommunicationService {
     public void send(String message) {
         this.out.println(message);
     }
-
-//    else if (command.startsWith("CURRENT")) {
-//
-
-//
-//            if (isActive(this)) {
-//
-//            if (isPawnOwner(chosenX, chosenY, this.playerId)) {
-//            oldX = chosenX;
-//            oldY = chosenY;
-//            possibleMoves = createRulesTable(oldX, oldY, this.playerId);
-//            String info = infoToString(possibleMoves);
-//            out.println("INFO " + info);
-//
-//            } else {
-//            out.println("MESSAGE Choose your pawn!");
-//            }
-//
-//            } else {
-//            out.println("MESSAGE Not your turn");
-//            }
-
-//    private void processMoveCommand() {
-//
-//        Cell currentCell = new Cell(oldX, oldY, playerId);
-//
-//        Iterator gameRulesIterator = new GameRulesIterator(gameContext.getRules());
-//        {
-//            while (gameRulesIterator.hasNext()) {
-//                GameRule gameRule = (GameRule) gameRulesIterator.next();
-//                Iterator iterator = new RulesIterator(gameRule.getPossibleMoves(currentCell, gameContext.getBoard()));
-//                while (iterator.hasNext()) {
-//                    Change c = (Change) iterator.next();
-//                    if (c.getX() == newX && c.getY() == newY) {
-//                        gameContext.getBoard().getCell(newX, newY).setCellState(currentPlayer.playerId);
-//                        gameContext.getBoard().getCell(oldX, oldY).setCellState(0);
-//                        for (Player player : players) {
-//                            player.out.println("PLAYER_MOVED " + newX + ";" + newY + ";" + currentPlayer.playerId);
-//                        }
-//                        sendResults(this);
-//                        break;
-//                    }
-//                }
-//            }
-//        }
-//
-//    }
-
-//
-//    Change[] createRulesTable(int x, int y, int state) {
-//        Cell currentCell = new Cell(x,y,state);
-//        ArrayList<Change> moves = new ArrayList<Change>();
-//        Iterator gameRulesIterator = new GameRulesIterator(gameContext.getRules());
-//        while (gameRulesIterator.hasNext()) {
-//            GameRule gameRule = (GameRule) gameRulesIterator.next();
-//            Iterator iterator = new RulesIterator(gameRule.getPossibleMoves(currentCell, gameContext.getBoard()));
-//            while (iterator.hasNext()) {
-//                Change change = (Change) iterator.next();
-//                moves.add(change);
-//            }
-//        }
-//        return moves.toArray(new Change[0]);
-//    }
 
 }

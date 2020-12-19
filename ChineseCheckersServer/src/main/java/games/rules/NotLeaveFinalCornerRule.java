@@ -1,9 +1,7 @@
-package rules;
+package games.rules;
 
-import boards.Cell;
-import boards.GameBoard;
-
-import java.util.ArrayList;
+import games.boards.Cell;
+import games.boards.GameBoard;
 
 public class NotLeaveFinalCornerRule implements FilterRule {
     @Override

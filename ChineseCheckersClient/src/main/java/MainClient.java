@@ -13,6 +13,8 @@ public class MainClient extends JFrame {
     private final ClientCommunicationService communicationService;
 
     private final JLabel messageLabel;
+    private final JButton closeButton;
+    private final JButton passButton;
     private final Container boardViewContainer;
     private BoardView boardView;
 
@@ -20,18 +22,21 @@ public class MainClient extends JFrame {
         try {
             this.socket = new Socket(InetAddress.getLocalHost(), 58901);
         } catch (Exception e) {
-            System.out.println("Connection refused, try again");
+            System.out.println("Connection refused, server is offline");
             System.exit(1);
         }
         this.communicationService = new ClientCommunicationService(this, this.socket);
 
         boardViewContainer = new Container();
         this.messageLabel = new JLabel("Waiting for game to start");
+        this.messageLabel.setForeground(CellState.getColorById(0));
 
-        JButton passButton = new JButton("Pass");
+        passButton = new JButton("Pass");
+        passButton.setFocusable(false);
         passButton.addActionListener(e -> this.communicationService.send("PASS"));
 
-        JButton closeButton = new JButton("Close");
+        closeButton = new JButton("Close");
+        closeButton.setFocusable(false);
         closeButton.addActionListener(e -> {
             this.communicationService.send("QUIT");
             this.dispose();
@@ -45,8 +50,9 @@ public class MainClient extends JFrame {
         this.add(closeButton, BorderLayout.NORTH);
 
         this.setTitle("Chinese Checkers - player");
+        this.setIconImage(new ImageIcon("ChineseCheckersClient/src/main/resources/icon4.png").getImage());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(820, 820);
+        this.setSize(758, 790);
         this.setResizable(false);
         this.setVisible(true);
     }
@@ -70,7 +76,9 @@ public class MainClient extends JFrame {
 
     public void setPlayer(int playerId) {
         this.setTitle(this.getTitle() + playerId);
-        this.messageLabel.setForeground(CellState.getColorById(playerId));
+        this.passButton.setForeground(CellState.getColorById(playerId));
+        this.closeButton.setForeground(CellState.getColorById(playerId));
+        this.getContentPane().setBackground(CellState.getColorById(playerId));
     }
 
     public void start() throws Exception {

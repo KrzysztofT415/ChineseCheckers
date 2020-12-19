@@ -1,4 +1,4 @@
-import rules.Change;
+import games.rules.Change;
 
 public class RulesIterator implements Iterator{
 

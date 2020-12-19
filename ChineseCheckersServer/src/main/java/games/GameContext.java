@@ -1,7 +1,7 @@
 package games;
 
-import boards.GameBoard;
-import rules.GameRule;
+import games.boards.GameBoard;
+import games.rules.GameRule;
 
 public interface GameContext {
     GameRule[] getRules();

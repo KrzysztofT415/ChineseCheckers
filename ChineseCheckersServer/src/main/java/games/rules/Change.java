@@ -1,4 +1,4 @@
-package rules;
+package games.rules;
 
 public class Change {
     private final int x;

@@ -36,7 +36,9 @@ public class MainServer implements Runnable {
 
                     System.out.println("Player " + i + " joined");
                 }
-
+                synchronized (this) {
+                    wait(100);
+                }
                 game.play();
                 System.out.println("All players are in lobby - game starting");
             }

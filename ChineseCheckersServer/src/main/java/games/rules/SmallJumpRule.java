@@ -1,7 +1,7 @@
-package rules;
+package games.rules;
 
-import boards.Cell;
-import boards.GameBoard;
+import games.boards.Cell;
+import games.boards.GameBoard;
 
 import java.util.ArrayList;
 import java.util.Arrays;

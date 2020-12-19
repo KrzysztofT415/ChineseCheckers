@@ -1,4 +1,4 @@
-package boards;
+package games.boards;
 
 public enum CellState {
     EMPTY(0),

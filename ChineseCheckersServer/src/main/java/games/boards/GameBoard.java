@@ -1,4 +1,4 @@
-package boards;
+package games.boards;
 
 public interface GameBoard {
     Cell getCell(int x, int y);

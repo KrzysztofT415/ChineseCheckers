@@ -1,10 +1,10 @@
 package games;
 
-import boards.GameBoard;
-import boards.StandardBoard;
-import rules.GameRule;
-import rules.MoveOneRule;
-import rules.SmallJumpRule;
+import games.boards.GameBoard;
+import games.boards.StandardBoard;
+import games.rules.GameRule;
+import games.rules.MoveOneRule;
+import games.rules.SmallJumpRule;
 
 public class StandardGameContext implements GameContext {
     private final GameRule[] rules;

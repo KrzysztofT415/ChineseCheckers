@@ -1,4 +1,4 @@
-import rules.GameRule;
+import games.rules.GameRule;
 
 public class GameRulesIterator implements Iterator{
 
@@ -19,10 +19,7 @@ public class GameRulesIterator implements Iterator{
 
     public boolean hasNext()
     {
-        if (j >= rules.length || rules[j] == null)
-            return false;
-        else
-            return true;
+        return j < rules.length && rules[j] != null;
     }
 
 }
