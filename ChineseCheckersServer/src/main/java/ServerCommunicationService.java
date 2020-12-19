@@ -1,10 +1,9 @@
-import rules.Change;
-import rules.MoveOneRule;
-import rules.SmallJumpRule;
+import rules.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class ServerCommunicationService {
@@ -113,9 +112,26 @@ public class ServerCommunicationService {
     }
 
     private Change[] getPossibleMoves(int chosenX, int chosenY) {
-        //TODO : get all possible moves
+        //TODO : get all possible move
+        ArrayList<Change> list = new ArrayList<>();
+        Iterator gameRulesIterator = new GameRulesIterator(this.game.getGameContext().getRules());
+
+        while (gameRulesIterator.hasNext()) {
+            Iterator iterator = new RulesIterator(((MoveRule) gameRulesIterator.next()).getPossibleMoves(this.game.getGameContext().getBoard().getCell(chosenX, chosenY), this.game.getGameContext().getBoard()));
+//            Iterator iterator;
+//            if (gameRulesIterator.next() instanceof MoveRule) {
+//                iterator = new RulesIterator(((MoveRule) gameRulesIterator.next()).getPossibleMoves(this.game.getGameContext().getBoard().getCell(chosenX, chosenY), this.game.getGameContext().getBoard()));
+//            } else {
+//                iterator = new RulesIterator(((FilterRule) gameRulesIterator.next()).filterMoves(this.game.getGameContext().getBoard().getCell(chosenX, chosenY), this.game.getGameContext().getBoard()));
+//            }
+            while (iterator.hasNext()) {
+                list.add((Change) iterator.next());
+            }
+        }
+        return list.toArray(new Change[0]);
+
 //        return (new MoveOneRule()).getPossibleMoves(this.game.getGameContext().getBoard().getCell(chosenX, chosenY), this.game.getGameContext().getBoard());
-        return (new SmallJumpRule()).getPossibleMoves(this.game.getGameContext().getBoard().getCell(chosenX, chosenY), this.game.getGameContext().getBoard());
+//        return (new SmallJumpRule()).getPossibleMoves(this.game.getGameContext().getBoard().getCell(chosenX, chosenY), this.game.getGameContext().getBoard());
     }
 
     private String changesInfoToString(Change[] info) {
