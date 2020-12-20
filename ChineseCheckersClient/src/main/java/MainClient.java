@@ -28,6 +28,10 @@ public class MainClient extends JFrame {
         this.communicationService = new ClientCommunicationService(this, this.socket);
 
         boardViewContainer = new Container();
+        JLabel logo = new JLabel();
+        logo.setSize(620, 620);
+        logo.setIcon(new ImageIcon(new ImageIcon("ChineseCheckersClient/src/main/resources/icon2.png").getImage().getScaledInstance(620, 620, Image.SCALE_SMOOTH)));
+        boardViewContainer.add(logo);
         this.messageLabel = new JLabel("Waiting for game to start");
         this.messageLabel.setForeground(CellState.getColorById(0));
 

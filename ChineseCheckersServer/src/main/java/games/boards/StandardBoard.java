@@ -84,16 +84,16 @@ public class StandardBoard implements GameBoard {
     public void placePlayers(int numberOfPlayers) {
         switch (numberOfPlayers) {
             case 2:
-                playerPlacing = new int[] {0,3};
+                playerPlacing = new int[] {3,0};
                 break;
             case 3:
-                playerPlacing = new int[] {0,2,4};
+                playerPlacing = new int[] {4,2,0};
                 break;
             case 4:
-                playerPlacing = new int[] {1,2,4,5};
+                playerPlacing = new int[] {5,4,2,1};
                 break;
             default:
-                playerPlacing = new int[] {0,1,2,3,4,5};
+                playerPlacing = new int[] {5,4,3,2,1,0};
                 break;
         }
 

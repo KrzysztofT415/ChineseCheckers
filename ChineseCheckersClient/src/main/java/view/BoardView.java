@@ -65,7 +65,6 @@ public class BoardView extends JPanel {
     }
 
     public void removePossibleMoves() {
-        System.out.println("removed");
         for (CellView cell : allCells) {
             if (cell.getColorState() == CellState.POSSIBLE_MOVE) {
                 cell.setCellState(0);
