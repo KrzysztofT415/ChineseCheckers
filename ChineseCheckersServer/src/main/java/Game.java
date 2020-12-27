@@ -9,6 +9,7 @@ class Game {
     private final Player[] players;
     private final GameContext gameContext;
     private Player currentPlayer;
+    private int winners = 0;
 
     public Game(int numberOfPlayers) {
         this.players = new Player[numberOfPlayers];
@@ -21,9 +22,23 @@ class Game {
     }
 
     public void nextPlayer() {
-        int nextPlayerId = currentPlayer.getPlayerId() % players.length;
-        this.currentPlayer = players[nextPlayerId];
+        int nextPlayerId = this.currentPlayer.getPlayerId() % players.length + 1;
+        while (this.gameContext.getBoard().isWinner(nextPlayerId)) {
+            nextPlayerId = nextPlayerId % players.length + 1;
+
+            if (nextPlayerId == currentPlayer.getPlayerId() && this.gameContext.getBoard().isWinner(currentPlayer.getPlayerId())) {
+                this.resend("END", currentPlayer.getPlayerId());
+                this.currentPlayer.getCommunicationService().send("END");
+                System.exit(0);
+            }
+        }
+        this.currentPlayer = players[nextPlayerId - 1];
         this.currentPlayer.getCommunicationService().send("MESSAGE It's your turn now!");
+    }
+
+    public int getWinners() {
+        winners++;
+        return winners;
     }
 
     public GameContext getGameContext() {
@@ -35,10 +50,15 @@ class Game {
     }
 
     public void resend(String message, int playerWhoSent) {
-        for (Player player : players) {
-            if (player.getPlayerId() != playerWhoSent) {
-                player.getCommunicationService().send(message);
+        try {
+            for (Player player : players) {
+                if (player.getPlayerId() != playerWhoSent) {
+                    player.getCommunicationService().send(message);
+                }
             }
+        } catch (NullPointerException e) {
+            System.out.println("Somebody is missing, server shutting down");
+            System.exit(1);
         }
     }
 

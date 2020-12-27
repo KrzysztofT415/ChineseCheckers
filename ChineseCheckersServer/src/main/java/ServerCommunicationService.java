@@ -153,8 +153,11 @@ public class ServerCommunicationService {
 
     private void checkWinner() {
         if (game.getGameContext().getBoard().isWinner(playerId)) {
-            this.game.resend("LOST", playerId);
-            this.out.println("WON");
+            int n = game.getWinners();
+            if (n == 1) {
+                this.game.resend("LOST", playerId);
+            }
+            this.out.println("WON " + n);
         }
     }
 

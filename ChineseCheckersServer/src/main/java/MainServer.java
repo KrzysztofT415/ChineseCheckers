@@ -1,3 +1,4 @@
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -21,6 +22,7 @@ public class MainServer implements Runnable {
             try (ServerSocket listener = new ServerSocket(58901)) {
 
                 System.out.println("Chinese Checkers Server is Running");
+                System.out.println("Server ip : " + InetAddress.getLocalHost().getHostAddress() + ":58901");
 
                 ExecutorService pool = Executors.newFixedThreadPool(lobbySize);
 

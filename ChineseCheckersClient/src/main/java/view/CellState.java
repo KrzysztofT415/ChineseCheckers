@@ -10,7 +10,8 @@ public enum CellState {
     PLAYER4(new Color(33,78,52)),
     PLAYER5(new Color(171,54,143)),
     PLAYER6(new Color(120, 84, 61)),
-    POSSIBLE_MOVE(new Color(255,236,81));
+    POSSIBLE_MOVE(new Color(255,236,81)),
+    WHITE(Color.white);
 
     private final Color color;
     CellState(Color color) {
@@ -21,26 +22,26 @@ public enum CellState {
         return color;
     }
 
-    public static Color getColorById(int id) {
+    public static CellState getStateById(int id) {
         switch (id) {
             case 0:
-                return EMPTY.getColor();
+                return EMPTY;
             case 1:
-                return PLAYER1.getColor();
+                return PLAYER1;
             case 2:
-                return PLAYER2.getColor();
+                return PLAYER2;
             case 3:
-                return PLAYER3.getColor();
+                return PLAYER3;
             case 4:
-                return PLAYER4.getColor();
+                return PLAYER4;
             case 5:
-                return PLAYER5.getColor();
+                return PLAYER5;
             case 6:
-                return PLAYER6.getColor();
+                return PLAYER6;
             case 7:
-                return POSSIBLE_MOVE.getColor();
+                return POSSIBLE_MOVE;
             default:
-                return Color.WHITE;
+                return WHITE;
         }
     }
 }

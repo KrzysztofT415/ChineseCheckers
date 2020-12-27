@@ -1,4 +1,4 @@
-import view.CellState;
+package app;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -8,14 +8,14 @@ import java.util.Scanner;
 
 public class ClientCommunicationService {
 
-    private final MainClient mainClient;
+    private final MainClient app;
     private int playerId;
 
     private Scanner in;
     private PrintWriter out;
 
-    public ClientCommunicationService(MainClient mainClient, Socket socket) {
-        this.mainClient = mainClient;
+    public ClientCommunicationService(MainClient app, Socket socket) {
+        this.app = app;
 
         try {
             this.in = new Scanner(socket.getInputStream());
@@ -43,7 +43,8 @@ public class ClientCommunicationService {
         String response = in.nextLine();
         System.out.println(response);
         this.playerId = Integer.parseInt(response.substring(8));
-        this.mainClient.setPlayer(playerId);
+        this.app.getAppWindow().setPlayer(playerId);
+
         while (in.hasNextLine()) {
             response = in.nextLine();
             System.out.println(response);
@@ -51,37 +52,40 @@ public class ClientCommunicationService {
             if (response.startsWith("START")) {
                 int[][] gameInfo = this.resolveParameters(response.substring(6));
 
-                this.mainClient.setStartingBoard(gameInfo);
+                this.app.getAppWindow().setStartingBoard(gameInfo);
             }
 
             else if (response.startsWith("SET")) {
                 int[][] gameInfo = this.resolveParameters(response.substring(4));
 
                 for (int[] change : gameInfo) {
-                    this.mainClient.getBoardView().updateCellState(change[0], change[1], change[2]);
+                    this.app.getAppWindow().getBoardView().updateCellState(change[0], change[1], change[2]);
                 }
             }
 
             else if (response.startsWith("CLEAR")) {
-                this.mainClient.getBoardView().removePossibleMoves();
+                this.app.getAppWindow().getBoardView().clearPossibleMoves();
             }
 
             else if (response.startsWith("MESSAGE")) {
-                this.mainClient.setMessageLabel(response.substring(8));
+                this.app.getAppWindow().setMessage(response.substring(8));
             }
 
             else if (response.startsWith("LOST")) {
-                JOptionPane.showMessageDialog(null, "You lost");
-                break;
+                JOptionPane.showMessageDialog(null, "Somebody won");
             }
 
             else if (response.startsWith("WON")) {
-                JOptionPane.showMessageDialog(null, "You won!");
-                break;
+                JOptionPane.showMessageDialog(null, "You won " + response.substring(4) + " place!");
             }
 
             else if (response.startsWith("LEAVE")) {
                 JOptionPane.showMessageDialog(null, "Someone left the game");
+                break;
+            }
+
+            else if (response.startsWith("END")) {
+                JOptionPane.showMessageDialog(null, "Game Ended!");
                 break;
             }
         }
