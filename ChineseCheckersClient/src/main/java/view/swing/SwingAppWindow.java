@@ -1,8 +1,8 @@
 package view.swing;
 
-import app.MainClient;
+import appClient.MainClient;
 import view.AppWindow;
-import app.BoardController;
+import appClient.BoardController;
 import view.BoardView;
 import view.CellState;
 
@@ -25,7 +25,7 @@ public class SwingAppWindow extends JFrame implements AppWindow {
         this.boardViewContainer = new Container();
         JLabel logo = new JLabel();
         logo.setSize(620, 620);
-        logo.setIcon(new ImageIcon(new ImageIcon("ChineseCheckersClient/src/main/resources/icon2.png").getImage().getScaledInstance(620, 620, Image.SCALE_SMOOTH)));
+        logo.setIcon(new ImageIcon(new ImageIcon("ChineseCheckersClient/src/main/resources/logo.png").getImage().getScaledInstance(620, 620, Image.SCALE_SMOOTH)));
 
         this.boardViewContainer.add(logo);
         this.messageLabel = new JLabel("Waiting for game to start");
@@ -51,7 +51,7 @@ public class SwingAppWindow extends JFrame implements AppWindow {
         this.add(closeButton, BorderLayout.NORTH);
 
         this.setTitle("Chinese Checkers - player");
-        this.setIconImage(new ImageIcon("ChineseCheckersClient/src/main/resources/icon4.png").getImage());
+        this.setIconImage(new ImageIcon("ChineseCheckersClient/src/main/resources/icon.png").getImage());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(758, 790);
         this.setResizable(false);

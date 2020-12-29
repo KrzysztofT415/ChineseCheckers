@@ -1,3 +1,8 @@
+package appServer;
+
+import games.Change;
+import games.boards.Cell;
+import games.boards.GameBoard;
 import games.rules.*;
 
 import java.io.IOException;
@@ -46,7 +51,7 @@ public class ServerCommunicationService {
 
             } else if (command.startsWith("PASS")) {
                 if (game.getCurrentPlayerId() == playerId) {
-                    game.resend("MESSAGE Player "+playerId+" passed his turn", playerId);
+                    game.resend("MESSAGE app.Player "+playerId+" passed his turn", playerId);
                     this.out.println("MESSAGE You Passed");
                     this.oldX = null;
                     this.oldY = null;
@@ -62,7 +67,7 @@ public class ServerCommunicationService {
         }
     }
 
-    private void processMoveCommand(int chosenX, int chosenY) {
+    public void processMoveCommand(int chosenX, int chosenY) {
 
         if (this.oldX == null || this.oldY == null) {
             if (this.game.getGameContext().getBoard().getCellState(chosenX, chosenY) != playerId) {
@@ -118,24 +123,37 @@ public class ServerCommunicationService {
         }
     }
 
-    private Change[] getPossibleMoves(int chosenX, int chosenY) {
-        //TODO : get all possible move
-        ArrayList<Change> list = new ArrayList<>();
-        Iterator gameRulesIterator = new GameRulesIterator(this.game.getGameContext().getRules());
+    public Change[] getPossibleMoves(int chosenX, int chosenY) {
+        ArrayList<Change> possibleMoves = new ArrayList<>();
+        GameBoard board = this.game.getGameContext().getBoard();
+        Cell currentCell = board.getCell(chosenX, chosenY);
 
-        while (gameRulesIterator.hasNext()) {
-            Iterator iterator = new RulesIterator(((MoveRule) gameRulesIterator.next()).getPossibleMoves(this.game.getGameContext().getBoard().getCell(chosenX, chosenY), this.game.getGameContext().getBoard()));
-//            Iterator iterator;
-//            if (gameRulesIterator.next() instanceof MoveRule) {
-//                iterator = new RulesIterator(((MoveRule) gameRulesIterator.next()).getPossibleMoves(this.game.getGameContext().getBoard().getCell(chosenX, chosenY), this.game.getGameContext().getBoard()));
-//            } else {
-//                iterator = new RulesIterator(((FilterRule) gameRulesIterator.next()).filterMoves(this.game.getGameContext().getBoard().getCell(chosenX, chosenY), this.game.getGameContext().getBoard()));
-//            }
+        MoveRule[] moveRules = this.game.getGameContext().getRulesOfType(MoveRule.class).toArray(new MoveRule[0]);
+        if (moveRules.length == 0) { moveRules = new MoveRule[]{new MoveOneRule()}; }
+
+        Iterator<MoveRule> moveRulesIterator = new Iterator<>(moveRules);
+
+        while (moveRulesIterator.hasNext()) {
+            Iterator<Change> iterator = new Iterator<>((moveRulesIterator.next()).getPossibleMoves(currentCell, board));
             while (iterator.hasNext()) {
-                list.add((Change) iterator.next());
+                possibleMoves.add(iterator.next());
             }
         }
-        return list.toArray(new Change[0]);
+
+        FilterRule[] filterRules = this.game.getGameContext().getRulesOfType(FilterRule.class).toArray(new FilterRule[0]);
+        if (filterRules.length == 0) { return possibleMoves.toArray(new Change[0]); }
+
+        ArrayList<Change> possibleMovesFiltered = new ArrayList<>();
+        Iterator<FilterRule> filterRulesIterator = new Iterator<>(filterRules);
+
+        while (filterRulesIterator.hasNext()) {
+            Iterator<Change> iterator = new Iterator<>((filterRulesIterator.next()).filterMoves(currentCell, board, possibleMoves.toArray(new Change[0])));
+            while (iterator.hasNext()) {
+                possibleMovesFiltered.add(iterator.next());
+            }
+        }
+
+        return possibleMovesFiltered.toArray(new Change[0]);
     }
 
     private String changesInfoToString(Change[] info) {

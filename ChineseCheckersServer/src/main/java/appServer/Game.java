@@ -1,3 +1,4 @@
+package appServer;
 
 import games.GameContext;
 import games.StandardGameContext;

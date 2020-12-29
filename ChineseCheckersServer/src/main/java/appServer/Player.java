@@ -1,3 +1,5 @@
+package appServer;
+
 import java.net.Socket;
 
 class Player implements Runnable {

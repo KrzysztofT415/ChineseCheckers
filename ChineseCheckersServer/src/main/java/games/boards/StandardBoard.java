@@ -55,10 +55,11 @@ public class StandardBoard implements GameBoard {
         return null;
     }
 
-    public int getCorner(Cell searchedCell) {
+    @Override
+    public int getCorner(int x, int y) {
         for (int i = 0; i < 6; i++) {
             for (Cell cell : cornerCells[i]) {
-                if (cell == searchedCell) {
+                if (cell.getX() == x && cell.getY() == y) {
                     return i;
                 }
             }
@@ -106,12 +107,17 @@ public class StandardBoard implements GameBoard {
 
     @Override
     public boolean isWinner(int playerId) {
-        for (Cell cell : cornerCells[(playerPlacing[playerId - 1] + 3) % 6]) {
+        for (Cell cell : cornerCells[getDestination(playerId)]) {
             if (cell.getCellState() != playerId) {
                 return false;
             }
         }
         return true;
+    }
+
+    @Override
+    public int getDestination(int playerId) {
+        return (playerPlacing[playerId - 1] + 3) % 6;
     }
 
     @Override

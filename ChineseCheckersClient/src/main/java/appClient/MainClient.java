@@ -1,4 +1,4 @@
-package app;
+package appClient;
 
 import view.AppWindow;
 import view.swing.SwingAppWindow;

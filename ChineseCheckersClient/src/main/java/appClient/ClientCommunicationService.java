@@ -1,4 +1,4 @@
-package app;
+package appClient;
 
 import javax.swing.*;
 import java.io.IOException;

@@ -4,6 +4,7 @@ import games.boards.GameBoard;
 import games.boards.StandardBoard;
 import games.rules.GameRule;
 import games.rules.MoveOneRule;
+import games.rules.NotLeaveFinalCornerRule;
 import games.rules.SmallJumpRule;
 
 public class StandardGameContext implements GameContext {
@@ -13,7 +14,8 @@ public class StandardGameContext implements GameContext {
     public StandardGameContext() {
         this.rules = new GameRule[] {
                 new MoveOneRule(),
-                new SmallJumpRule()
+                new SmallJumpRule(),
+                new NotLeaveFinalCornerRule()
         };
         this.board = new StandardBoard();
     }

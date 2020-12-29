@@ -1,5 +1,6 @@
 package games.rules;
 
+import games.Change;
 import games.boards.Cell;
 import games.boards.GameBoard;
 

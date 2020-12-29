@@ -1,4 +1,4 @@
-package app;
+package appClient;
 
 import view.BoardView;
 import java.awt.event.MouseAdapter;
