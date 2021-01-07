@@ -3,6 +3,8 @@ package view.swing;
 import org.junit.Before;
 import org.junit.Test;
 import view.CellState;
+import view.swing.SwingCellView;
+
 import java.awt.*;
 
 import static org.junit.Assert.*;
