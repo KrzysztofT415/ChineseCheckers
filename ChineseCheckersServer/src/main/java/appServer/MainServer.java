@@ -40,6 +40,7 @@ public class MainServer implements Runnable {
                 }
                 game.play();
                 System.out.println("All players are in lobby - game starting");
+                System.out.println("\n---\nSERVER COMMUNICATION SERVICE :");
             }
         } catch (Exception e) {
             e.printStackTrace();

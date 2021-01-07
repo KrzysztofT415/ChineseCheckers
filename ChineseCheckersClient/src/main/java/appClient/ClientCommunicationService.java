@@ -40,6 +40,7 @@ public class ClientCommunicationService {
     }
 
     public void start() {
+        System.out.println("\n---\nCLIENT COMMUNICATION SERVICE :");
         String response = in.nextLine();
         System.out.println(response);
         this.playerId = Integer.parseInt(response.substring(8));

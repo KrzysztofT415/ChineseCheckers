@@ -74,7 +74,7 @@ class Game {
                 gameInfoString.append(";").append(x);
             }
         }
-        System.out.println(gameInfoString);
+        System.out.println("Sending starting string to clients - " + gameInfoString);
         for (Player player : players) {
             player.getCommunicationService().send(gameInfoString.toString());
         }
