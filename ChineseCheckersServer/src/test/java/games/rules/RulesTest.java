@@ -47,8 +47,7 @@ public class RulesTest {
         gameBoard.setCellState(0, 0,2);
         gameBoard.setCellState(1, 0,3);
         Change[] change = {
-                new Change(0,0,7), new Change(2,0,7), new Change(0,0,7),
-                new Change(2,0,7)};
+                new Change(0,0,7), new Change(2,0,7)};
         Assert.assertTrue(compareChangeArrays(change, smallJumpRule.getPossibleMoves(cell, gameBoard)));
     }
 
