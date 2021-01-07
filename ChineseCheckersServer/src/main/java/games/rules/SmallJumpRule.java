@@ -28,7 +28,7 @@ public class SmallJumpRule implements MoveRuleChainable {
                     if (!isCounted(destinationCell, possibleMoves) && destinationCell.getCellState() == 0) {
                         possibleMoves.add(new Change(x + direction[0], y + direction[1], 7));
                         Change[] furtherMoves = this.getPossibleMoves(destinationCell, board, possibleMoves.toArray(new Change[0]));
-                        possibleMoves.addAll(Arrays.asList(furtherMoves));
+                        possibleMoves = new ArrayList<>(Arrays.asList(furtherMoves));
                     }
                 }
             }

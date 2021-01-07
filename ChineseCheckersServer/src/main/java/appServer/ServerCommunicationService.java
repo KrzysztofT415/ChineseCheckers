@@ -51,7 +51,7 @@ public class ServerCommunicationService {
 
             } else if (command.startsWith("PASS")) {
                 if (game.getCurrentPlayerId() == playerId) {
-                    game.resend("MESSAGE app.Player "+playerId+" passed his turn", playerId);
+                    game.resend("MESSAGE Player "+playerId+" passed his turn", playerId);
                     this.out.println("MESSAGE You Passed");
                     this.oldX = null;
                     this.oldY = null;
