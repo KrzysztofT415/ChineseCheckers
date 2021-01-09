@@ -4,6 +4,9 @@ import view.BoardView;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+/**
+ * Class responsible for mouse interactions with the board used by the app
+ */
 public class BoardController extends MouseAdapter {
 
     private final ClientCommunicationService communicationService;
@@ -14,6 +17,12 @@ public class BoardController extends MouseAdapter {
         this.boardView = boardView;
     }
 
+    /**
+     * Method calculates which cell was clicked by the player using coordinates provided after
+     * pressing the mouse button, then invokes method responsible for sending coordinates x,y of
+     * said cell to the server
+     * @param e Mouse interaction with the board
+     */
     @Override
     public void mousePressed(MouseEvent e) {
         int[] cell = this.boardView.calculateCellAtPoint(e.getX(), e.getY());

@@ -5,6 +5,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * Class containing methods responsible for reading and sending messages from server
+ */
 public class ClientCommunicationService {
 
     private final MainClient app;
@@ -15,6 +18,11 @@ public class ClientCommunicationService {
 
     private CommunicationModule communicationModule;
 
+    /**
+     * Creates Scanner and PrintWriter for client to receive and send messages from and to the server
+     * @param app MainClient for which these objects are created
+     * @param socket Socket to which client is connected
+     */
     public ClientCommunicationService(MainClient app, Socket socket) {
         this.app = app;
 
@@ -30,6 +38,10 @@ public class ClientCommunicationService {
         this.communicationModule = communicationModule;
     }
 
+    /**
+     * Method checks if some message from server was received, reads it and
+     * invokes a method responsible for processing said message
+     */
     public void start() {
         System.out.println("\n---\nCLIENT COMMUNICATION SERVICE :");
         String response = in.nextLine();
@@ -48,6 +60,10 @@ public class ClientCommunicationService {
         this.out.println("QUIT");
     }
 
+    /**
+     * Method sends provided String to the server via PrintWriter
+     * @param message Text to be sent
+     */
     public void send(String message) {
         this.out.println(message);
     }

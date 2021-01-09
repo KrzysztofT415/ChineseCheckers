@@ -1,5 +1,8 @@
 package appClient;
 
+/**
+ * Class responsible for handling messages coming from the server
+ */
 public class GameCommunicationModule implements CommunicationModule {
 
     private final MainClient app;
@@ -8,6 +11,15 @@ public class GameCommunicationModule implements CommunicationModule {
         this.app = app;
     }
 
+    /**
+     * Method responsible for identifying and handling messages received from the server.
+     * Detailed description of said messages can be found in class MainClient.
+     * Each message starts with a keyword, method performs various operations depending on these keywords
+     * and invokes a method that converts provided parameters to an array, if they exist.
+     *
+     * @param response String containing keyword or keyword and parameters to be converted
+     * @return 1 if message was END and game is supposed to finish, 0 otherwise
+     */
     @Override
     public int execute(String response) {
         if (response.startsWith("START")) {
@@ -53,6 +65,12 @@ public class GameCommunicationModule implements CommunicationModule {
         return 0;
     }
 
+    /**
+     * Method converts provided String to an array containing
+     * coordinates x,y and states representing places on board
+     * @param response String in a form of [length;x;y;state;x1;y1;state;...]
+     * @return Array containing information about places on board
+     */
     public int[][] resolveParameters(String response) {
         String[] stringParameters = response.split(";");
 
