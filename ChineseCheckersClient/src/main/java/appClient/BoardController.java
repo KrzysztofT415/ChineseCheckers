@@ -17,6 +17,6 @@ public class BoardController extends MouseAdapter {
     @Override
     public void mousePressed(MouseEvent e) {
         int[] cell = this.boardView.calculateCellAtPoint(e.getX(), e.getY());
-        this.communicationService.sendClick(cell[0], cell[1]);
+        this.communicationService.send("CLICK " + cell[0] + ";" + cell[1]);
     }
 }

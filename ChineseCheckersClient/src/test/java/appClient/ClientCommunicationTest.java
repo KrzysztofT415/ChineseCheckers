@@ -1,26 +1,25 @@
 package appClient;
 
-import org.hamcrest.core.StringContains;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
-import view.swing.*;
+import view.AppWindow;
+import view.BoardView;
 
 import java.io.*;
 import java.lang.reflect.Field;
 import java.util.Scanner;
 
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.mock;
 
 public class ClientCommunicationTest {
 
     ClientCommunicationService communicationService;
     MainClient client;
     PrintWriter writer;
-    SwingAppWindow window;
-    SwingBoardView boardView;
+    AppWindow window;
+    BoardView boardView;
     ByteArrayOutputStream outContent = new ByteArrayOutputStream();
     Scanner in;
 
@@ -36,22 +35,21 @@ public class ClientCommunicationTest {
 
         Field mainClient = ClientCommunicationService.class.getDeclaredField("app");
         mainClient.setAccessible(true);
-        client = mock(MainClient.class);
+        client = Mockito.mock(MainClient.class);
 
-        communicationService = mock(ClientCommunicationService.class);
+        communicationService = Mockito.mock(ClientCommunicationService.class);
         in = new Scanner("WELCOME 2");
         scanner.set(communicationService, in);
         writer = new PrintWriter(System.out, true);
         output.set(communicationService, writer);
 
         mainClient.set(communicationService, client);
-        window = mock(SwingAppWindow.class);
-        boardView = mock(SwingBoardView.class);
+        window = Mockito.mock(AppWindow.class);
+        boardView = Mockito.mock(BoardView.class);
 
         Mockito.doCallRealMethod().when(communicationService).start();
         Mockito.when(client.getAppWindow()).thenReturn(window);
         Mockito.doCallRealMethod().when(communicationService).send(any());
-        Mockito.doCallRealMethod().when(communicationService).sendClick(anyInt(), anyInt());
         Mockito.when(window.getBoardView()).thenReturn(boardView);
     }
 
@@ -65,25 +63,14 @@ public class ClientCommunicationTest {
     public void testSend() {
         communicationService.send("Dummy message");
         String result = outContent.toString();
-        Assert.assertThat(result, StringContains.containsString("Dummy message"));
-    }
-
-    @Test
-    public void testSendClick() {
-        communicationService.sendClick(1,2);
-        String result = outContent.toString();
-        Assert.assertThat(result, StringContains.containsString("CLICK 1;2"));
-
-        communicationService.sendClick(-3,-5);
-        result = outContent.toString();
-        Assert.assertThat(result, StringContains.containsString("CLICK -3;-5"));
+        Assert.assertTrue(result.contains("Dummy message"));
     }
 
     @Test
     public void testStartQuit() {
         communicationService.start();
         String result = outContent.toString();
-        Assert.assertThat(result, StringContains.containsString("QUIT"));
+        Assert.assertTrue(result.contains("QUIT"));
     }
 
 }

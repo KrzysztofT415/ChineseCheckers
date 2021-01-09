@@ -32,6 +32,7 @@ public class MainClient {
             System.out.println("Client connected to : "+input);
 
             this.communicationService = new ClientCommunicationService(this, this.socket);
+            this.communicationService.connectModule(new GameCommunicationModule(this));
             this.appWindow = new SwingAppWindow(this);
             this.start();
             break;

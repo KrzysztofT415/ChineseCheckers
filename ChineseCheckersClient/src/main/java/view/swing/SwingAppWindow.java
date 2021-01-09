@@ -64,6 +64,11 @@ public class SwingAppWindow extends JFrame implements AppWindow {
     }
 
     @Override
+    public void showMessageWindow(String message) {
+        JOptionPane.showMessageDialog(null, message);
+    }
+
+    @Override
     public BoardView getBoardView() {
         return boardView;
     }

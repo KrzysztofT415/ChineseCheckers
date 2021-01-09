@@ -11,10 +11,10 @@ public class BoardViewTest {
 
     @Before
     public void setUp() {
-        int[][] dummyGameInfo = {};
+        int[][] dummyGameInfo = {{2, 0, 2}, {1, 0, 1}};
         boardView = new SwingBoardView(dummyGameInfo);
-
     }
+
     @Test
     public void testCalculateCellAtPoint() {
         int[] expected = {-1,-1};
