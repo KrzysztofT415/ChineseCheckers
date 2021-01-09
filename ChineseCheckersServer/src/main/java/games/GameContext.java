@@ -23,6 +23,11 @@ public interface GameContext {
      */
     GameBoard getBoard();
 
+    /**
+     * Method that uses generic types to filter rules and return only these which type is matching filter
+     * @param searchedClass type filter
+     * @return arraylist of rules with given type
+     */
     default <T extends GameRule> ArrayList<T> getRulesOfType(Class<T> searchedClass) {
         ArrayList<T> rules = new ArrayList<>();
         for (GameRule rule : this.getRules()) {

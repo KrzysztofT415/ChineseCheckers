@@ -1,9 +1,12 @@
 package view.swing;
 
 import view.CellState;
-
 import java.awt.*;
 
+/**
+ * View of cells created using Polygons from Swing.
+ * It creates simple regular hexagon.
+ */
 public class SwingCellView extends Polygon {
 
     private final int centerX;
@@ -12,6 +15,15 @@ public class SwingCellView extends Polygon {
     private final int gridY;
     private CellState cellState;
 
+    /**
+     * Default constructor.
+     * @param centerX coordinate x of cells center in pixels
+     * @param centerY coordinate y of cells center in pixels
+     * @param gridX coordinate x of cells position on grid
+     * @param gridY coordinate x of cells position on grid
+     * @param cellState information about cells current state
+     * @param radius radius of prescribed circle
+     */
     public SwingCellView(int centerX, int centerY, int gridX, int gridY, int cellState, int radius) {
         this.centerX = centerX;
         this.centerY = centerY;
@@ -46,15 +58,11 @@ public class SwingCellView extends Polygon {
         return gridY;
     }
 
-    public Color getColor() {
-        return cellState.getColor();
-    }
-
     public CellState getCellState() {
         return cellState;
     }
 
-    public void setCellState(int cellState) {
-        this.cellState = CellState.getStateById(cellState);
+    public void setCellState(int cellStateId) {
+        this.cellState = CellState.getStateById(cellStateId);
     }
 }

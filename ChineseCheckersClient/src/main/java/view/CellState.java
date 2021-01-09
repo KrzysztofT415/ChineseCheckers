@@ -2,6 +2,9 @@ package view;
 
 import java.awt.*;
 
+/**
+ * Defines all possible states of cells' display. Each state has its own color.
+ */
 public enum CellState {
     EMPTY(new Color(205,221,221)),
     PLAYER1(new Color(165,68,39)),
@@ -14,6 +17,7 @@ public enum CellState {
     WHITE(Color.white);
 
     private final Color color;
+
     CellState(Color color) {
         this.color = color;
     }
@@ -22,6 +26,11 @@ public enum CellState {
         return color;
     }
 
+    /**
+     * Gets state using id.
+     * @param id id of state to search for
+     * @return state with this id or white by default
+     */
     public static CellState getStateById(int id) {
         switch (id) {
             case 0:

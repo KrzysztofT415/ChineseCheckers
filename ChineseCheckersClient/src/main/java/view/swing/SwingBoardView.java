@@ -6,6 +6,9 @@ import view.CellState;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Visual representation of board using JPanel from Swing.
+ */
 public class SwingBoardView extends JPanel implements BoardView {
 
     private final int BOARD_WIDTH = 720;
@@ -15,6 +18,10 @@ public class SwingBoardView extends JPanel implements BoardView {
 
     private final SwingCellView[] allCells;
 
+    /**
+     * Default constructor. Creates board using array of cells' information.
+     * @param gameInfo starting board information
+     */
     public SwingBoardView(int[][] gameInfo) {
 
         this.allCells = new SwingCellView[gameInfo.length];
@@ -30,6 +37,11 @@ public class SwingBoardView extends JPanel implements BoardView {
         this.setSize(BOARD_WIDTH, BOARD_HEIGHT);
     }
 
+    /**
+     * Method that paints cell at board panel.
+     * @param cell cell which is painted
+     * @param g2d graphics where cell is painted
+     */
     private void paintCell(SwingCellView cell, Graphics2D g2d) {
         if (cell.getCellState() != CellState.POSSIBLE_MOVE) {
             g2d.setPaint(CellState.EMPTY.getColor());
@@ -39,7 +51,7 @@ public class SwingBoardView extends JPanel implements BoardView {
         g2d.fillPolygon(cell);
 
         if (cell.getCellState() != CellState.EMPTY || cell.getCellState() != CellState.POSSIBLE_MOVE) {
-            g2d.setPaint(cell.getColor());
+            g2d.setPaint(cell.getCellState().getColor());
             g2d.fillOval((int) (cell.getX() - (CELL_RADIUS * 0.7) - 1), (int) (cell.getY() - (CELL_RADIUS * 0.7) - 1), (int) (CELL_RADIUS * 1.4), (int) (CELL_RADIUS * 1.4));
         }
     }
@@ -57,6 +69,12 @@ public class SwingBoardView extends JPanel implements BoardView {
         }
     }
 
+    /**
+     * Finds cell by given coordinates and updates its state.
+     * @param x coordinate x of searched cell
+     * @param y coordinate y of searched cell
+     * @param newState targeted state to change cell to
+     */
     @Override
     public void updateCellState(int x, int y, int newState) {
         for (SwingCellView cell : allCells) {
@@ -68,6 +86,11 @@ public class SwingBoardView extends JPanel implements BoardView {
         }
     }
 
+    /**
+     * Finds cell by given coordinates on JPanel.
+     * @param x coordinate x of JPanel in pixels
+     * @param y coordinate y of JPanel in pixels
+     */
     @Override
     public int[] calculateCellAtPoint(double x, double y) {
         x -= BOARD_WIDTH / 2.;
@@ -94,6 +117,9 @@ public class SwingBoardView extends JPanel implements BoardView {
         return new int[] {(int) rx,(int) ry};
     }
 
+    /**
+     * Finds cells that are in possible move state and changes them to empty.
+     */
     @Override
     public void clearPossibleMoves() {
         for (SwingCellView cell : allCells) {

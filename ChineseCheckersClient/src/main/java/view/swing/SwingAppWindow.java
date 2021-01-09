@@ -9,6 +9,10 @@ import view.CellState;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Window of application using JFrame from Swing.
+ * Contains two buttons - Pass and Close, massage Label and Container for board display.
+ */
 public class SwingAppWindow extends JFrame implements AppWindow {
 
     private final MainClient app;
@@ -19,6 +23,10 @@ public class SwingAppWindow extends JFrame implements AppWindow {
     private final Container boardViewContainer;
     private SwingBoardView boardView;
 
+    /**
+     * Default constructor. Refers to application and builds whole window.
+     * @param app client application context
+     */
     public SwingAppWindow(MainClient app) {
         this.app = app;
 
@@ -58,11 +66,19 @@ public class SwingAppWindow extends JFrame implements AppWindow {
         this.setVisible(true);
     }
 
+    /**
+     * Sets message on message label.
+     * @param message message text
+     */
     @Override
     public void setMessage(String message) {
         this.messageLabel.setText(message);
     }
 
+    /**
+     * Opens new message window with notification.
+     * @param message message text
+     */
     @Override
     public void showMessageWindow(String message) {
         JOptionPane.showMessageDialog(null, message);
@@ -73,6 +89,10 @@ public class SwingAppWindow extends JFrame implements AppWindow {
         return boardView;
     }
 
+    /**
+     * Turns array containing all cells' information into boardView.
+     * @param gameInfo gameInfo array
+     */
     @Override
     public void setStartingBoard(int[][] gameInfo) {
         this.boardViewContainer.removeAll();
@@ -86,6 +106,10 @@ public class SwingAppWindow extends JFrame implements AppWindow {
         this.boardView.repaint();
     }
 
+    /**
+     * Method that changes cosmetic of window to match player color.
+     * @param playerId id of player, defines color used
+     */
     @Override
     public void setPlayer(int playerId) {
         this.setTitle(this.getTitle() + playerId);

@@ -25,13 +25,11 @@ public class CellViewTest {
         assertEquals(1, cellView.getGridX());
         assertEquals(1, cellView.getGridY());
         assertEquals(CellState.EMPTY, cellView.getCellState());
-        assertEquals(new Color(205,221,221), cellView.getColor());
     }
 
     @Test
     public void testSetState() {
         cellView.setCellState(5);
         assertEquals(CellState.PLAYER5, cellView.getCellState());
-        assertEquals(new Color(171,54,143), cellView.getColor());
     }
 }

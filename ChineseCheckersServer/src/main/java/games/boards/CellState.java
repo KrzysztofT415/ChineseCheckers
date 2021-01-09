@@ -14,6 +14,7 @@ public enum CellState {
     PLAYER6(6);
 
     private final int cellStateId;
+
     CellState(int cellStateId) {
         this.cellStateId = cellStateId;
     }
