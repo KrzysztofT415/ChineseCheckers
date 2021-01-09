@@ -7,8 +7,20 @@ import games.rules.GameRule;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 
+/**
+ * Interface for classes storing information about used rules and board
+ */
 public interface GameContext {
+    /**
+     * Method returns array of used rules
+     * @return Array of used rules
+     */
     GameRule[] getRules();
+
+    /**
+     * Method returns used board
+     * @return Used board
+     */
     GameBoard getBoard();
 
     default <T extends GameRule> ArrayList<T> getRulesOfType(Class<T> searchedClass) {
