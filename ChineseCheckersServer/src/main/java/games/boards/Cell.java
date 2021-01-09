@@ -1,5 +1,8 @@
 package games.boards;
 
+/**
+ * Cell on game grid.
+ */
 public class Cell {
 
     public static int[][] directions = new int[][] {{1,0},{0,1},{-1,1},{-1,0},{0,-1},{1,-1}};
@@ -8,24 +11,22 @@ public class Cell {
     private final int y;
     private CellState cellState;
 
+    /**
+     * Default cell constructor.
+     * @param x coordinate x of cell on grid
+     * @param y coordinate y of cell on grid
+     * @param cellStateId state of cell
+     */
     public Cell(int x, int y, int cellStateId) {
         this.x = x;
         this.y = y;
         this.setCellState(cellStateId);
     }
 
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public int getCellState() {
-        return cellState.getCellStateId();
-    }
-
+    /**
+     * Changes state of cell based on id.
+     * @param cellStateId id of new state
+     */
     public void setCellState(int cellStateId) {
         switch (cellStateId) {
             case 0:
@@ -50,5 +51,21 @@ public class Cell {
                 this.cellState = CellState.PLAYER6;
                 break;
         }
+    }
+
+    /**
+     * Returns corresponding id of state in which cell is in the moment.
+     * @return id of current state
+     */
+    public int getCellState() {
+        return cellState.getCellStateId();
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

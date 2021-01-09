@@ -1,15 +1,21 @@
 package games.boards;
 
+/**
+ * Standard six-pointed star shaped board.
+ * Has 121 cells, 61 in center and 60 in corners.
+ */
 public class StandardBoard implements GameBoard {
 
     private final Cell[] centerCells;
     private final Cell[][] cornerCells;
     private int[] playerPlacing;
 
+    /**
+     * Default constructor.
+     */
     public StandardBoard() {
         this.centerCells = new Cell[61];
 
-        // Generating empty center
         int r = 4;
         int pointer = -1;
         for (int x = -r; x <= r; x++) {
@@ -22,7 +28,6 @@ public class StandardBoard implements GameBoard {
             }
         }
 
-        //Generating empty corners
         this.cornerCells = new Cell[6][10];
         int[][] elements = new int[][] { {1,4,-5}, {2,3,-5}, {3,2,-5}, {4,1,-5}, {2,4,-6}, {3,3,-6}, {4,2,-6}, {3,4,-7}, {4,3,-7}, {4,4,-8} };
 
@@ -36,6 +41,12 @@ public class StandardBoard implements GameBoard {
         }
     }
 
+    /**
+     * Finds cell by given coordinates.
+     * @param x coordinate x of searched cell
+     * @param y coordinate y of searched cell
+     * @return found cell or null board has no cell with given coordinates
+     */
     @Override
     public Cell getCell(int x, int y) {
         for (Cell cell : centerCells) {
@@ -55,6 +66,12 @@ public class StandardBoard implements GameBoard {
         return null;
     }
 
+    /**
+     * Finds if cell is located in corner by given coordinates.
+     * @param x coordinate x of searched cell
+     * @param y coordinate y of searched cell
+     * @return found id of corner or 0 if cell is not found
+     */
     @Override
     public int getCorner(int x, int y) {
         for (int i = 0; i < 6; i++) {
@@ -67,20 +84,10 @@ public class StandardBoard implements GameBoard {
         return 0;
     }
 
-    @Override
-    public int getCellState(int x, int y) {
-        Cell chosenCell = this.getCell(x, y);
-        if (chosenCell == null) {
-            return -1;
-        }
-        return chosenCell.getCellState();
-    }
-
-    @Override
-    public void setCellState(int x, int y, int newState) {
-        this.getCell(x, y).setCellState(newState);
-    }
-
+    /**
+     * Locates player on board depending on the number of players.
+     * @param numberOfPlayers how many players will be in game
+     */
     @Override
     public void placePlayers(int numberOfPlayers) {
         switch (numberOfPlayers) {
@@ -105,6 +112,11 @@ public class StandardBoard implements GameBoard {
         }
     }
 
+    /**
+     * Finds if a player with given id won the game.
+     * @param playerId id of player who will be checked
+     * @return boolean value if player won
+     */
     @Override
     public boolean isWinner(int playerId) {
         for (Cell cell : cornerCells[getDestination(playerId)]) {
@@ -115,11 +127,20 @@ public class StandardBoard implements GameBoard {
         return true;
     }
 
+    /**
+     * Finds id of corner that player should reach in order to win.
+     * @param playerId id of player whose destination will be checked
+     * @return id of destination corner
+     */
     @Override
     public int getDestination(int playerId) {
         return (playerPlacing[playerId - 1] + 3) % 6;
     }
 
+    /**
+     * Transforms board into array where each cell is defined by {x, y, state}.
+     * @return array of all cells
+     */
     @Override
     public int[][] asGameInfo() {
         int[][] gameInfo = new int[121][3];

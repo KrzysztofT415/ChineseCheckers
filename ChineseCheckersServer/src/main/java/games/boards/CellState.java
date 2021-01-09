@@ -1,5 +1,9 @@
 package games.boards;
 
+/**
+ * Defines all possible states of cell. Each state has unique id.
+ * Could be replaced by hashMap, because has similar purpose.
+ */
 public enum CellState {
     EMPTY(0),
     PLAYER1(1),
