@@ -15,20 +15,30 @@ import java.util.concurrent.Executors;
  * Communication between server and clients is based on plain text, called as ChChP (Chinese Checkers Protocol)
  * The strings that are sent in ChChP are:
  *
- *  Client -> Server           Server -> Client
- *  ----------------           ----------------
- *  CLICK [x;y]                WELCOME [n] (1 <= n <= 6)
- *  PASS                       START [n;x1;y1;s1;x2;y2...]
- *  QUIT                       SET [n;x1;y1;s1;x2;y2...]
- *                             CLEAR
- *                             MESSAGE [String]
- *                             LOST
- *                             WON [n] (1 <= n <= 6)
- *                             LEAVE
- *                             END
+ *
+ *----------------
+ * Client -> Server
+ *
+ * CLICK [x;y]
+ * PASS
+ * QUIT
  *
  * where:
- * in CLICK [x;y] are coordinates of clicked cell
+ *  * in CLICK [x;y] are coordinates of clicked cell
+ * ----------------
+ * Server -> Client
+ *
+ * WELCOME [n] (1 <= n <= 6)
+ * START [n;x1;y1;s1;x2;y2...]
+ * SET [n;x1;y1;s1;x2;y2...]
+ * CLEAR
+ * MESSAGE [String]
+ * LOST
+ * WON [n] (1 <= n <= 6)
+ * LEAVE
+ * END
+ *
+ * where:
  * in SET and START [n;x1;y1;s1;x2;y2...]:
  *   <n> means number of changed cells
  *   x[i], y[i] are coordinates of changed cell
@@ -37,6 +47,7 @@ import java.util.concurrent.Executors;
  * in WELCOME [n] is playerId of player that joined
  * in WON [n] is playerId of player that won game
  * in MESSAGE [String] is text to be displayed in message box on client
+ * ----------------
  *
  * @author Martyna Dziamara, Krzysztof Tałałaj
  */
