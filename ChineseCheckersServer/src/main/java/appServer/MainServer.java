@@ -15,7 +15,6 @@ import java.util.concurrent.Executors;
  * Communication between server and clients is based on plain text, called as ChChP (Chinese Checkers Protocol)
  * The strings that are sent in ChChP are:
  *
- *
  *----------------
  * Client -> Server
  *
@@ -49,7 +48,8 @@ import java.util.concurrent.Executors;
  * in MESSAGE [String] is text to be displayed in message box on client
  * ----------------
  *
- * @author Martyna Dziamara, Krzysztof Tałałaj
+ * @author Martyna Dziamara, Krzysztof Talalaj
+ *
  */
 public class MainServer implements Runnable {
 

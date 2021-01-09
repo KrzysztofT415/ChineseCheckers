@@ -49,7 +49,8 @@ import java.net.Socket;
  * in MESSAGE [String] is text to be displayed in message box on client
  * ----------------
  *
- * @author Martyna Dziamara, Krzysztof Tałałaj
+ * @author Martyna Dziamara, Krzysztof Talalaj
+ *
  */
 public class MainClient {
 
