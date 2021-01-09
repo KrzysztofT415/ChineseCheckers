@@ -11,7 +11,8 @@ class Player implements Runnable {
     public Player(int playerId, Game game, Socket socket) {
         this.playerId = playerId;
         this.game = game;
-        this.communicationService = new ServerCommunicationService(playerId, game, socket);
+        this.communicationService = new ServerCommunicationService(playerId, socket);
+        this.communicationService.connectModule(new GameCommunicationModule(playerId, game, communicationService));
     }
 
     @Override
