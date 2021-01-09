@@ -9,6 +9,9 @@ import games.rules.MoveRule;
 
 import java.util.ArrayList;
 
+/**
+ * Class responsible for handling messages from the clients
+ */
 public class GameCommunicationModule implements CommunicationModule {
 
     private final Game game;
@@ -23,6 +26,15 @@ public class GameCommunicationModule implements CommunicationModule {
         this.communicationService = communicationService;
     }
 
+    /**
+     * Method responsible for identifying and handling messages received from clients.
+     * Detailed description of said messages can be found in class MainServer.
+     * Each message starts with a keyword, method performs various operations depending on these keywords
+     * and invokes a method that converts provided parameters to an array, if they exist.
+     *
+     * @param command String containing keyword or keyword and parameters to be converted
+     * @return 1 if message was QUIT and game is supposed to finish, 0 otherwise
+     */
     @Override
     public int execute(String command) {
         if (command.startsWith("CLICK")) {
@@ -54,6 +66,21 @@ public class GameCommunicationModule implements CommunicationModule {
         return 0;
     }
 
+    /**
+     * Method processes coordinates after player has clicked something on the board
+     * We assume that move has two chapters: player clicked the pawn that they want to move,
+     * or player clicked the destination they want to move the pawn to.
+     * Firstly, method checks if there are previously clicked coordinates, if not - it's
+     * chapter one and method checks if player clicked their pawn and if there are any possible moves
+     * for chosen pawn, if so it stores clicked coordinates and sends message to client about
+     * possible places to move from clicked cell.
+     * If there stored coordinates are not null then it means it's chapter two.
+     * Method checks if newly clicked coordinates are in the array of possible moves, if so
+     * it updates board, sends information about the move to clients, checks if the player won
+     * and changes player to the next one
+     * @param chosenX coordinate x chosen by the player
+     * @param chosenY coordinate y chosen by the player
+     */
     public void processMoveCommand(int chosenX, int chosenY) {
 
         if (this.oldX == null || this.oldY == null) {
@@ -110,6 +137,14 @@ public class GameCommunicationModule implements CommunicationModule {
         }
     }
 
+    /**
+     * Method generates an array of places where player can move a pawn from given coordinates x,y
+     * It iterates through all the rules for the given board and returns an array of all of them,
+     * then filters the moves by iterating through all the rules that restrict moving to some places
+     * @param chosenX given x coordinate
+     * @param chosenY given y coordinate
+     * @return array with information about places where pawn can move from chosen x,y coordinates
+     */
     public Change[] getPossibleMoves(int chosenX, int chosenY) {
         ArrayList<Change> possibleMoves = new ArrayList<>();
         GameBoard board = this.game.getGameContext().getBoard();
@@ -143,6 +178,11 @@ public class GameCommunicationModule implements CommunicationModule {
         return possibleMovesFiltered.toArray(new Change[0]);
     }
 
+    /**
+     * Method coverts given array to String
+     * @param info given array with information to convert
+     * @return String with information from the array in a form of [SET length;x;y;state;x1;y1;state1;...]
+     */
     public String changesInfoToString(Change[] info) {
         StringBuilder result = new StringBuilder("SET "+info.length);
         for (Change change : info) {
@@ -156,6 +196,10 @@ public class GameCommunicationModule implements CommunicationModule {
         return result.toString();
     }
 
+    /**
+     * Method checks if player won the game, if so it sends information about it to
+     * all the players
+     */
     public void checkWinner() {
         if (game.getGameContext().getBoard().isWinner(playerId)) {
             int n = game.getWinners();

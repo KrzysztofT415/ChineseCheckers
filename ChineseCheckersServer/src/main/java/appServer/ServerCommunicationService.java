@@ -5,6 +5,9 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+/**
+ * Class containing methods responsible for receiving messages from clients
+ */
 public class ServerCommunicationService {
 
     private final int playerId;
@@ -25,10 +28,19 @@ public class ServerCommunicationService {
         }
     }
 
+    /**
+     * Method to set the right CommunicationModule which is responsible for processing messages
+     * received from client
+     * @param communicationModule CommunicationModule being used for the game
+     */
     public void connectModule(CommunicationModule communicationModule) {
         this.communicationModule = communicationModule;
     }
 
+    /**
+     * Method checks if some message from client was received, reads it and
+     * invokes a method responsible for processing said message
+     */
     public void start() {
         while (this.in.hasNextLine()) {
             String command = in.nextLine();
@@ -40,6 +52,10 @@ public class ServerCommunicationService {
         }
     }
 
+    /**
+     * Method sends passed String to the client
+     * @param message Text to be sent
+     */
     public void send(String message) {
         this.out.println(message);
     }

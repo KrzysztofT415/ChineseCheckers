@@ -2,6 +2,9 @@ package appServer;
 
 import java.net.Socket;
 
+/**
+ * Class representing a player that connects to the server
+ */
 class Player implements Runnable {
 
     private final int playerId;
@@ -15,6 +18,11 @@ class Player implements Runnable {
         this.communicationService.connectModule(new GameCommunicationModule(playerId, game, communicationService));
     }
 
+    /**
+     * Method invokes method responsible for communication with client.
+     * When player leaves the game it invokes the method that sends information about it to other
+     * players and then shuts down
+     */
     @Override
     public void run() {
         this.communicationService.send("WELCOME "+this.playerId);
@@ -23,10 +31,18 @@ class Player implements Runnable {
         System.exit(1);
     }
 
+    /**
+     * Method to get the id of the player
+     * @return Id of this player
+     */
     public int getPlayerId() {
         return playerId;
     }
 
+    /**
+     * Method to get the ServerCommunicationService of the player
+     * @return ServerCommunicationService of this player
+     */
     public ServerCommunicationService getCommunicationService() {
         return communicationService;
     }
