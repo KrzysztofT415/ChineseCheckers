@@ -1,0 +1,121 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/matthewjosephtaylor/plantuml-style/master/style.pu
+
+package appClient {
+    class MainClient
+    class ClientCommunicationService
+    class BoardController
+
+    package CommunicationModules <<Rectangle>> {
+        class GameCommunicationModule
+        class CommunicationModule
+    }
+    package java.awt.event {
+        class MouseAdapter
+    }
+}
+
+class MainClient {
+- Socket socket
+- AppWindow appWindow
+- ClientCommunicationService communicationService
++ void start()
++ {static} void main(String[])
++ AppWindow getAppWindow()
++ ClientCommunicationService getCommunicationService()
+}
+interface CommunicationModule {
+~ int execute(String)
+}
+class GameCommunicationModule {
+- MainClient app
++ int execute(String)
++ int[][] resolveParameters(String)
+}
+class ClientCommunicationService {
+- MainClient app
+- int playerId
+- Scanner in
+- PrintWriter out
+- CommunicationModule communicationModule
++ void connectModule(CommunicationModule)
++ void start()
++ void send(String)
+}
+interface view.BoardView {
+~ int[] calculateCellAtPoint(double,double)
+~ void updateCellState(int,int,int)
+~ void clearPossibleMoves()
+}
+class view.swing.SwingCellView {
+- int centerX
+- int centerY
+- int gridX
+- int gridY
+- CellState cellState
++ int getX()
++ int getY()
++ int getGridX()
++ int getGridY()
++ CellState getCellState()
++ void setCellState(int)
+}
+class view.swing.SwingBoardView {
+- int BOARD_WIDTH
+- int BOARD_HEIGHT
+- int BOARD_SPACING
+- int CELL_RADIUS
+- SwingCellView[] allCells
+- void paintCell(SwingCellView,Graphics2D)
+# void paintComponent(Graphics)
++ void updateCellState(int,int,int)
++ int[] calculateCellAtPoint(double,double)
++ void clearPossibleMoves()
+}
+class BoardController {
+- ClientCommunicationService communicationService
+- BoardView boardView
++ void mousePressed(MouseEvent)
+}
+class view.swing.SwingAppWindow {
+- MainClient app
+- JLabel messageLabel
+- JButton closeButton
+- JButton passButton
+- Container boardViewContainer
+- SwingBoardView boardView
++ void setMessage(String)
++ void showMessageWindow(String)
++ BoardView getBoardView()
++ void setStartingBoard(int[][])
++ void setPlayer(int)
++ void close()
+}
+interface view.AppWindow {
+~ void setStartingBoard(int[][])
+~ void setPlayer(int)
+~ void setMessage(String)
+~ void showMessageWindow(String)
+~ BoardView getBoardView()
+~ void close()
+}
+
+CommunicationModule <|.. GameCommunicationModule
+view.swing.Polygon <|-left- view.swing.SwingCellView
+view.BoardView <|.left. view.swing.SwingBoardView
+view.swing.JPanel <|-left- view.swing.SwingBoardView
+MouseAdapter <|-down- BoardController
+view.swing.SwingAppWindow .down.|> view.AppWindow
+view.swing.JFrame <|-left- view.swing.SwingAppWindow
+
+view.AppWindow -down[hidden]- view.BoardView
+view -right[hidden]- view.swing
+appClient -down[hidden]- view.swing
+
+MainClient "1" *-- "1" ClientCommunicationService
+MainClient "1" *-left- "1" BoardController
+MainClient "1" *-- "1" view.AppWindow
+ClientCommunicationService "1" *-left- "1" CommunicationModules
+view.swing.SwingBoardView "1" *-- "many" view.swing.SwingCellView
+view.swing.SwingAppWindow "1" *-- "1" view.swing.SwingBoardView
+@enduml

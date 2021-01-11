@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>appServer</OriginalElement>
+  <nodes>
+    <node x="2074.318181818182" y="1308.0">appServer.Iterator</node>
+    <node x="559.318181818182" y="1353.0">games.rules.MoveRuleChainable</node>
+    <node x="1379.9445720087479" y="1353.0">games.rules.NotLeaveFinalCornerRule</node>
+    <node x="1917.5279053420813" y="1605.0">appServer.GameCommunicationModule</node>
+    <node x="682.2047953764446" y="573.0">games.boards.GameBoard</node>
+    <node x="708.7047953764446" y="327.0">games.boards.Cell</node>
+    <node x="619.6923227116525" y="1705.0">games.rules.SmallJumpRule</node>
+    <node x="0.0" y="1704.5">games.GameContext</node>
+    <node x="693.2047953764446" y="0.0">games.boards.CellState</node>
+    <node x="2320.609848484849" y="1275.0">appServer.ServerCommunicationService</node>
+    <node x="1249.318181818182" y="1021.0">games.rules.FilterRule</node>
+    <node x="329.25431896282464" y="2006.0">games.StandardGameContext</node>
+    <node x="937.318181818182" y="1021.0">games.rules.MoveRule</node>
+    <node x="1762.318181818182" y="1353.0">games.rules.MoveOneRule</node>
+    <node x="1757.538128709778" y="616.5">games.Change</node>
+    <node x="185.83851140268735" y="662.0">games.rules.GameRule</node>
+    <node x="304.0000000000001" y="921.0">games.boards.StandardBoard</node>
+    <node x="2314.2904326772896" y="1021.0">appServer.CommunicationModule</node>
+    <node x="2311.047348484849" y="2565.0">appServer.MainServer</node>
+    <node x="2242.422348484849" y="2238.0">appServer.Game</node>
+    <node x="2356.3654326772894" y="1983.0">appServer.Player</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="games.rules.MoveOneRule" target="games.rules.MoveRule">
+      <point x="-116.79999999999995" y="-27.0" />
+      <point x="1791.518181818182" y="1205.0" />
+      <point x="1192.818181818182" y="1205.0" />
+      <point x="109.5" y="27.0" />
+    </edge>
+    <edge source="games.rules.MoveRuleChainable" target="games.rules.MoveRule">
+      <point x="43.25" y="-27.0" />
+      <point x="775.568181818182" y="1225.0" />
+      <point x="973.818181818182" y="1225.0" />
+      <point x="-109.5" y="27.0" />
+    </edge>
+    <edge source="appServer.GameCommunicationModule" target="appServer.CommunicationModule">
+      <point x="142.3333333333336" y="-149.0" />
+      <point x="2273.361238675415" y="1565.0" />
+      <point x="2310.109848484849" y="1565.0" />
+      <point x="2310.109848484849" y="1255.0" />
+      <point x="2347.623766010623" y="1255.0" />
+      <point x="-66.66666666666652" y="27.0" />
+    </edge>
+    <edge source="games.rules.FilterRule" target="games.rules.GameRule">
+      <point x="-116.25" y="-27.0" />
+      <point x="1288.068181818182" y="821.0" />
+      <point x="288.5051780693541" y="821.0" />
+      <point x="46.666666666666686" y="15.0" />
+    </edge>
+    <edge source="games.rules.NotLeaveFinalCornerRule" target="games.rules.FilterRule">
+      <point x="-62.0" y="-27.0" />
+      <point x="1472.9445720087479" y="1225.0" />
+      <point x="1507.6515151515152" y="1225.0" />
+      <point x="103.33333333333326" y="27.0" />
+    </edge>
+    <edge source="games.rules.MoveRule" target="games.rules.GameRule">
+      <point x="-109.5" y="-27.0" />
+      <point x="973.818181818182" y="841.0" />
+      <point x="269.83851140268735" y="841.0" />
+      <point x="28.0" y="15.0" />
+    </edge>
+    <edge source="games.boards.StandardBoard" target="games.boards.GameBoard">
+      <point x="62.25" y="-127.0" />
+      <point x="449.2500000000001" y="851.0" />
+      <point x="691.2502499218991" y="851.0" />
+      <point x="-90.4545454545455" y="104.0" />
+    </edge>
+    <edge source="games.StandardGameContext" target="games.GameContext">
+      <point x="-90.0" y="-49.5" />
+      <point x="339.25431896282464" y="1963.0" />
+      <point x="217.5" y="1963.0" />
+      <point x="87.0" y="49.5" />
+    </edge>
+    <edge source="games.rules.SmallJumpRule" target="games.rules.MoveRuleChainable">
+      <point x="0.0" y="-49.0" />
+      <point x="792.6923227116525" y="1585.0" />
+      <point x="732.318181818182" y="1585.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.34551117625503847" x="1334.0000000000002" y="1354.5" />
+  <SelectedNodes>
+    <node>appServer.Iterator</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

@@ -1,0 +1,173 @@
+@startuml
+!includeurl https://raw.githubusercontent.com/matthewjosephtaylor/plantuml-style/master/style.pu
+
+package appServer {
+    class MainServer
+    class Game
+    class Player
+    class ServerCommunicationService
+    class Iterator
+
+    package CommunicationModules <<Rectangle>> {
+        class GameCommunicationModule
+        class CommunicationModule
+    }
+}
+
+interface games.GameContext {
+~ GameRule[] getRules()
+~ GameBoard getBoard()
+~ ArrayList<T> getRulesOfType(Class<T>)
+}
+interface games.rules.GameRule {
+}
+class GameCommunicationModule {
+- Game game
+- int playerId
+- ServerCommunicationService communicationService
+- Integer oldX
+- Change[] possibleMoves
++ int execute(String)
++ void processMoveCommand(int,int)
++ Change[] getPossibleMoves(int,int)
++ String changesInfoToString(Change[])
++ void checkWinner()
+}
+interface CommunicationModule {
+~ int execute(String)
+}
+
+
+class games.boards.Cell {
++ {static} int[][] directions
+- int x
+- int y
+- CellState cellState
++ void setCellState(int)
++ int getCellState()
++ int getX()
++ int getY()
+}
+class Player {
+- int playerId
+- Game game
+- ServerCommunicationService communicationService
++ void run()
++ int getPlayerId()
++ ServerCommunicationService getCommunicationService()
+}
+class games.boards.StandardBoard {
+- Cell[] centerCells
+- Cell[][] cornerCells
+- int[] playerPlacing
++ Cell getCell(int,int)
++ int getCorner(int,int)
++ void placePlayers(int)
++ boolean isWinner(int)
++ int getDestination(int)
++ int[][] asGameInfo()
+}
+class Game {
+- Player[] players
+- GameContext gameContext
+- Player currentPlayer
+- int winners
++ void connectPlayer(Player,int)
++ void nextPlayer()
++ int getWinners()
++ GameContext getGameContext()
++ int getCurrentPlayerId()
++ void resend(String,int)
++ void play()
+}
+class Iterator {
+~ T[] elements
+~ int j
++ T next()
++ boolean hasNext()
+}
+class MainServer {
+- int lobbySize
++ void run()
++ {static} int verifyArguments(String[])
++ {static} void main(String[])
+}
+interface games.boards.GameBoard {
+~ int getCellState(int,int)
+~ void setCellState(int,int,int)
+~ Cell getCell(int,int)
+~ void placePlayers(int)
+~ boolean isWinner(int)
+~ int getDestination(int)
+~ int getCorner(int,int)
+~ int[][] asGameInfo()
+}
+class games.Change {
+- int x
+- int y
+- int state
++ int getX()
++ int getY()
++ int getState()
+}
+class games.rules.MoveOneRule {
++ Change[] getPossibleMoves(Cell,GameBoard)
+}
+interface games.rules.MoveRule {
+~ Change[] getPossibleMoves(Cell,GameBoard)
+}
+class games.rules.NotLeaveFinalCornerRule {
++ Change[] filterMoves(Cell,GameBoard,Change[])
+}
+interface games.rules.FilterRule {
+~ Change[] filterMoves(Cell,GameBoard,Change[])
+}
+class games.StandardGameContext {
+- GameRule[] rules
+- GameBoard board
++ GameRule[] getRules()
++ GameBoard getBoard()
+}
+class ServerCommunicationService {
+- int playerId
+- Scanner in
+- PrintWriter out
+- CommunicationModule communicationModule
++ void connectModule(CommunicationModule)
++ void start()
++ void send(String)
+}
+class games.rules.SmallJumpRule {
++ Change[] getPossibleMoves(Cell,GameBoard)
++ Change[] getPossibleMoves(Cell,GameBoard,Change[])
+- boolean isCounted(Cell,ArrayList<Change>)
+}
+interface games.rules.MoveRuleChainable {
+~ Change[] getPossibleMoves(Cell,GameBoard,Change[])
+}
+
+
+CommunicationModule <|.left. GameCommunicationModule
+games.boards.GameBoard <|.right. games.boards.StandardBoard
+games.rules.MoveRule <|.. games.rules.MoveOneRule : implement
+games.rules.GameRule <|-- games.rules.MoveRule : extend
+games.rules.FilterRule <|.. games.rules.NotLeaveFinalCornerRule : implement
+games.rules.GameRule <|-- games.rules.FilterRule : extend
+games.GameContext <|.. games.StandardGameContext : implement
+games.rules.MoveRuleChainable <|.. games.rules.SmallJumpRule : implement
+games.rules.MoveRule <|-- games.rules.MoveRuleChainable : extend
+
+games.Change -left[hidden]- games.StandardGameContext
+
+games.GameContext "1" o-left- "*" games.rules.GameRule : contains
+games.GameContext "1" o-- "1" games.boards.GameBoard : contains
+games.boards.GameBoard "1" *-down- "*" games.boards.Cell
+Game "1" *-- "1" games.GameContext
+games.Change ... ServerCommunicationService
+Game ",4,6}" *-left- "{2,3" Player
+CommunicationModules -up-* "1" ServerCommunicationService
+MainServer "1" *-- "1" Game
+Player "1" *-- "1" ServerCommunicationService
+ServerCommunicationService .left.. Iterator
+
+@enduml
