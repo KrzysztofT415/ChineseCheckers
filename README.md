@@ -29,3 +29,5 @@ c. Website version of client to play in browser
 ### Possible future additions
 a. Compiling modules into two packages with executables.  
 b. Defining players by nicknames not ids
+
+## Made by Krzysztof Tałałaj and Martyna Dziamara
