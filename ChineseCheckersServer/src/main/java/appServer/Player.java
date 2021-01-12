@@ -5,7 +5,7 @@ import java.net.Socket;
 /**
  * Class representing a player that connects to the server
  */
-class Player implements Runnable {
+class Player implements User {
 
     private final int playerId;
     private final Game game;

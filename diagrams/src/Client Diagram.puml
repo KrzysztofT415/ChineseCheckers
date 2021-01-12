@@ -77,7 +77,7 @@ class BoardController {
 - BoardView boardView
 + void mousePressed(MouseEvent)
 }
-class view.swing.SwingAppWindow {
+class view.swing.SwingAppWindowPlaying {
 - MainClient app
 - JLabel messageLabel
 - JButton closeButton
@@ -105,8 +105,8 @@ view.swing.Polygon <|-left- view.swing.SwingCellView
 view.BoardView <|.left. view.swing.SwingBoardView
 view.swing.JPanel <|-left- view.swing.SwingBoardView
 MouseAdapter <|-down- BoardController
-view.swing.SwingAppWindow .down.|> view.AppWindow
-view.swing.JFrame <|-left- view.swing.SwingAppWindow
+view.swing.SwingAppWindowPlaying .down.|> view.AppWindow
+view.swing.JFrame <|-left- view.swing.SwingAppWindowPlaying
 
 view.AppWindow -down[hidden]- view.BoardView
 view -right[hidden]- view.swing
@@ -117,5 +117,5 @@ MainClient "1" *-left- "1" BoardController
 MainClient "1" *-- "1" view.AppWindow
 ClientCommunicationService "1" *-left- "1" CommunicationModules
 view.swing.SwingBoardView "1" *-- "many" view.swing.SwingCellView
-view.swing.SwingAppWindow "1" *-- "1" view.swing.SwingBoardView
+view.swing.SwingAppWindowPlaying "1" *-- "1" view.swing.SwingBoardView
 @enduml
