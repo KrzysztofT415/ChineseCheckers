@@ -88,23 +88,33 @@ public class MainServer implements Runnable {
 
                 ExecutorService pool = Executors.newFixedThreadPool(lobbySize);
 
-                Game game = new Game(lobbySize);
-                System.out.println("New game created - lobby size : " + lobbySize);
+                if (lobbySize == 1) {
+                    System.out.println("Waiting for player who want to watch game to connect");
+                    Spectator spectator = new Spectator(listener.accept());
+                    pool.execute(spectator);
+                    System.out.println("Player connected - started displaying game");
 
-                for (int i = 1; i <= lobbySize; i++) {
-                    System.out.println("Waiting for player " + i);
+                    synchronized (this) { wait(100); }
+                    spectator.getCommunicationService().send("START 4;0;0;1;0;1;0;1;0;0;1;1;0");
 
-                    Player newPlayer = new Player(i, game, listener.accept());
-                    game.connectPlayer(newPlayer, i - 1);
-                    pool.execute(newPlayer);
+                } else {
+                    Game game = new Game(lobbySize);
+                    System.out.println("New game created - lobby size : " + lobbySize);
 
-                    System.out.println("Player " + i + " joined");
+                    for (int i = 1; i <= lobbySize; i++) {
+                        System.out.println("Waiting for player " + i);
+
+                        Player newPlayer = new Player(i, game, listener.accept());
+                        game.connectPlayer(newPlayer, i - 1);
+                        pool.execute(newPlayer);
+
+                        System.out.println("Player " + i + " joined");
+                    }
+                    synchronized (this) { wait(100); }
+                    game.play();
+                    System.out.println("All players are in lobby - game starting");
                 }
-                synchronized (this) {
-                    wait(100);
-                }
-                game.play();
-                System.out.println("All players are in lobby - game starting");
+
                 System.out.println("\n---\nSERVER COMMUNICATION SERVICE :");
             }
         } catch (Exception e) {
@@ -125,7 +135,7 @@ public class MainServer implements Runnable {
         try { numberOfPlayers = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) { throw new IllegalArgumentException("Incorrect argument format"); }
 
-        if (numberOfPlayers != 2 && numberOfPlayers != 3 && numberOfPlayers != 4 && numberOfPlayers != 6) {
+        if (numberOfPlayers != 1 && numberOfPlayers != 2 && numberOfPlayers != 3 && numberOfPlayers != 4 && numberOfPlayers != 6) {
             throw new IllegalArgumentException("Incorrect number of players");
         }
 

@@ -1,7 +1,8 @@
 package appClient;
 
 import view.AppWindow;
-import view.swing.SwingAppWindow;
+import view.swing.SwingAppWindowPlaying;
+import view.swing.SwingAppWindowWatching;
 
 import javax.swing.*;
 import java.io.IOException;
@@ -54,9 +55,9 @@ import java.net.Socket;
  */
 public class MainClient {
 
-    private final Socket socket;
-    private final AppWindow appWindow;
     private final ClientCommunicationService communicationService;
+    private final Socket socket;
+    private AppWindow appWindow;
 
     /**
      * Verifies arguments and then creates lobby for expected players.
@@ -65,8 +66,14 @@ public class MainClient {
     public MainClient(Socket socket) {
         this.socket = socket;
         this.communicationService = new ClientCommunicationService(this, this.socket);
-        this.communicationService.connectModule(new GameCommunicationModule(this));
-        this.appWindow = new SwingAppWindow(this);
+    }
+
+    public void connectModule(CommunicationModule communicationModule) {
+        this.communicationService.connectModule(communicationModule);
+    }
+
+    public void connectWindow(AppWindow appWindow) {
+        this.appWindow = appWindow;
     }
 
     /**
@@ -88,6 +95,9 @@ public class MainClient {
      * Runs the application. Verifies connection and creates new Client.
      */
     public static void main(String[] args) {
+
+        int mode = JOptionPane.showOptionDialog(null, "Welcome to chinese Checkers!\nWhat do you want to do?", "Chinese Checkers", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, new Object[]{"Watch game","Play game"},"Ok");
+
         while(true) {
             String input = JOptionPane.showInputDialog("Ip address of server host (ip:port) :");
             if (input == null) break;
@@ -97,7 +107,16 @@ public class MainClient {
                 int port = Integer.parseInt(input.split(":")[1]);
 
                 Socket socket = new Socket(InetAddress.getByName(ip), port);
+
                 MainClient mainClient = new MainClient(socket);
+                CommunicationModule communicationModule;
+                if (mode == 0) {
+                    mainClient.connectWindow(new SwingAppWindowWatching(mainClient));
+                    communicationModule = new WatchingCommunicationModule(mainClient); }
+                else {
+                    mainClient.connectWindow(new SwingAppWindowPlaying(mainClient));
+                    communicationModule = new GameCommunicationModule(mainClient); }
+                mainClient.connectModule(communicationModule);
 
                 System.out.println("Client connected to : "+input);
                 mainClient.start();

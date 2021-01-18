@@ -13,7 +13,7 @@ import java.awt.*;
  * Window of application using JFrame from Swing.
  * Contains two buttons - Pass and Close, massage Label and Container for board display.
  */
-public class SwingAppWindow extends JFrame implements AppWindow {
+public class SwingAppWindowPlaying extends JFrame implements AppWindow {
 
     private final MainClient app;
 
@@ -27,7 +27,7 @@ public class SwingAppWindow extends JFrame implements AppWindow {
      * Default constructor. Refers to application and builds whole window.
      * @param app client application context
      */
-    public SwingAppWindow(MainClient app) {
+    public SwingAppWindowPlaying(MainClient app) {
         this.app = app;
 
         this.boardViewContainer = new Container();

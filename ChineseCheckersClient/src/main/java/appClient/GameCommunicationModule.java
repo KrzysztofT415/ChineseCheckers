@@ -65,23 +65,5 @@ public class GameCommunicationModule implements CommunicationModule {
         return 0;
     }
 
-    /**
-     * Method converts provided String to an array containing
-     * coordinates x,y and states representing places on board
-     * @param response String in a form of [length;x;y;state;x1;y1;state;...]
-     * @return Array containing information about places on board
-     */
-    public int[][] resolveParameters(String response) {
-        String[] stringParameters = response.split(";");
 
-        int[][] changes = new int[Integer.parseInt(stringParameters[0])][3];
-        for (int i = 0; i < changes.length; i++) {
-            changes[i] = new int[]
-                    { Integer.parseInt(stringParameters[i * 3 + 1]),
-                            Integer.parseInt(stringParameters[i * 3 + 2]),
-                            Integer.parseInt(stringParameters[i * 3 + 3]) };
-        }
-
-        return changes;
-    }
 }
