@@ -1,5 +1,6 @@
 package appServer;
 
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.util.Random;
@@ -73,10 +74,17 @@ public class MainServer implements Runnable {
     public void run() {
         try {
             int port = new Random().nextInt(10000);
-            try (ServerSocket listener = new ServerSocket(port)) {
+
+            String ip;
+            try(final DatagramSocket socket = new DatagramSocket()) {
+                socket.connect(InetAddress.getByName("8.8.8.8"), 10002);
+                ip = socket.getLocalAddress().getHostAddress();
+                System.out.println("SERVER IP : " + ip + ":" + port);
+            }
+
+            try (ServerSocket listener = new ServerSocket(port, 0, InetAddress.getByName(ip))) {
 
                 System.out.println("Chinese Checkers Server is Running");
-                System.out.println("Server ip : " + InetAddress.getLocalHost().getHostAddress() + ":" + port);
 
                 ExecutorService pool = Executors.newFixedThreadPool(lobbySize);
 
