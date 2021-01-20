@@ -1,5 +1,6 @@
 package appServer;
 
+import appServer.connectionDB.GameJDBCTemplate;
 import games.StandardGameContext;
 import org.junit.Assert;
 import org.junit.Before;
@@ -16,7 +17,7 @@ public class GameTest {
 
     @Before
     public void setUp() throws Exception {
-        game = new Game(2);
+        game = new Game(2, mock(GameJDBCTemplate.class), 2);
         communicationService = mock(ServerCommunicationService.class);
         player1 = mock(Player.class);
         player2 = mock(Player.class);
@@ -58,9 +59,7 @@ public class GameTest {
     }
 
     private boolean isOneOrTwo(int x) {
-        if (x == 1 || x == 2)
-            return true;
-        else return false;
+        return x == 1 || x == 2;
     }
 
 }

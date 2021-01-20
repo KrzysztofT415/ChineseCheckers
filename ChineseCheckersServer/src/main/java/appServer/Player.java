@@ -1,5 +1,7 @@
 package appServer;
 
+import appServer.connectionDB.GameJDBCTemplate;
+
 import java.net.Socket;
 
 /**
@@ -11,11 +13,11 @@ class Player implements User {
     private final Game game;
     private final ServerCommunicationService communicationService;
 
-    public Player(int playerId, Game game, Socket socket) {
+    public Player(int playerId, Game game, GameJDBCTemplate gameJDBCTemplate, Socket socket) {
         this.playerId = playerId;
         this.game = game;
         this.communicationService = new ServerCommunicationService(playerId, socket);
-        this.communicationService.connectModule(new GameCommunicationModule(playerId, game, communicationService));
+        this.communicationService.connectModule(new GameCommunicationModule(playerId, game, gameJDBCTemplate, communicationService));
     }
 
     /**

@@ -1,5 +1,6 @@
 package appServer;
 
+import appServer.connectionDB.GameJDBCTemplate;
 import games.GameContext;
 import games.StandardGameContext;
 
@@ -9,13 +10,17 @@ import java.util.Random;
  * Class contains and handles information about players
  */
 class Game {
+    private GameJDBCTemplate gameJDBCTemplate;
+    private int gameId;
 
     private final Player[] players;
     private final GameContext gameContext;
     private Player currentPlayer;
     private int winners = 0;
 
-    public Game(int numberOfPlayers) {
+    public Game(int gameId, GameJDBCTemplate gameJDBCTemplate, int numberOfPlayers) {
+        this.gameId = gameId;
+        this.gameJDBCTemplate = gameJDBCTemplate;
         this.players = new Player[numberOfPlayers];
         this.gameContext = new StandardGameContext();
         this.gameContext.getBoard().placePlayers(numberOfPlayers);
@@ -106,6 +111,7 @@ class Game {
             for (int x : cellInfo) {
                 gameInfoString.append(";").append(x);
             }
+            this.gameJDBCTemplate.save(this.getGameId(), -cellInfo[2], 0, 0, cellInfo[0], cellInfo[1]);
         }
         System.out.println("Sending starting string to clients - " + gameInfoString);
         for (Player player : players) {
@@ -114,5 +120,9 @@ class Game {
 
         this.resend("MESSAGE Player "+(randomPlayerId + 1)+" was chosen as first player", randomPlayerId + 1);
         this.currentPlayer.getCommunicationService().send("MESSAGE It's your turn now!");
+    }
+
+    public int getGameId() {
+        return gameId;
     }
 }

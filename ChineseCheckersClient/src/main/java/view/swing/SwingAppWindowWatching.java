@@ -56,7 +56,7 @@ public class SwingAppWindowWatching extends JFrame implements AppWindow {
         this.setTitle("Chinese Checkers - spectator");
         this.setIconImage(new ImageIcon("ChineseCheckersClient/src/main/resources/icon.png").getImage());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(758, 790);
+        this.setSize(805, 790);
         this.setResizable(false);
         this.setVisible(true);
     }

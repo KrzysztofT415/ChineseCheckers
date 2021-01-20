@@ -1,5 +1,9 @@
 package appServer;
 
+import appServer.connectionDB.GameJDBCTemplate;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -54,7 +58,11 @@ import java.util.concurrent.Executors;
  */
 public class MainServer implements Runnable {
 
+    private int gameId;
     private final int lobbySize;
+
+    private final ApplicationContext applicationContext;
+    private final GameJDBCTemplate gameJDBCTemplate;
 
     /**
      * Acts as lobby for players. Waits until all players are connected.
@@ -63,6 +71,13 @@ public class MainServer implements Runnable {
      */
     public MainServer(int lobbySize) {
         this.lobbySize = lobbySize;
+        this.applicationContext = new ClassPathXmlApplicationContext("Beans.xml");
+        this.gameJDBCTemplate = (GameJDBCTemplate) applicationContext.getBean("gameJDBCTemplate");
+    }
+
+    public MainServer(int lobbySize, int gameId) {
+        this(lobbySize);
+        this.gameId = gameId;
     }
 
     /**
@@ -90,21 +105,25 @@ public class MainServer implements Runnable {
 
                 if (lobbySize == 1) {
                     System.out.println("Waiting for player who want to watch game to connect");
-                    Spectator spectator = new Spectator(listener.accept());
+                    Spectator spectator = new Spectator(gameId, gameJDBCTemplate, listener.accept());
                     pool.execute(spectator);
                     System.out.println("Player connected - started displaying game");
 
                     synchronized (this) { wait(100); }
-                    spectator.getCommunicationService().send("START 4;0;0;1;0;1;0;1;0;0;1;1;0");
+                    spectator.sendStartingBoard();
 
                 } else {
-                    Game game = new Game(lobbySize);
+
+                    gameJDBCTemplate.addNewGame(ip);
+                    this.gameId = gameJDBCTemplate.getNewGameId(ip).getGameId();
+
+                    Game game = new Game(gameId, gameJDBCTemplate, lobbySize);
                     System.out.println("New game created - lobby size : " + lobbySize);
 
                     for (int i = 1; i <= lobbySize; i++) {
                         System.out.println("Waiting for player " + i);
 
-                        Player newPlayer = new Player(i, game, listener.accept());
+                        Player newPlayer = new Player(i, game, gameJDBCTemplate, listener.accept());
                         game.connectPlayer(newPlayer, i - 1);
                         pool.execute(newPlayer);
 
@@ -129,7 +148,7 @@ public class MainServer implements Runnable {
      * @throws IllegalArgumentException when arguments are incorrect
      */
     public static int verifyArguments(String[] args) throws IllegalArgumentException {
-        if (args.length != 1) { throw new IllegalArgumentException("Incorrect number of arguments"); }
+        if (args.length != 1 && args.length != 2) { throw new IllegalArgumentException("Incorrect number of arguments"); }
 
         int numberOfPlayers;
         try { numberOfPlayers = Integer.parseInt(args[0]);
@@ -137,6 +156,16 @@ public class MainServer implements Runnable {
 
         if (numberOfPlayers != 1 && numberOfPlayers != 2 && numberOfPlayers != 3 && numberOfPlayers != 4 && numberOfPlayers != 6) {
             throw new IllegalArgumentException("Incorrect number of players");
+        }
+
+        if (numberOfPlayers == 1) {
+            if (args.length != 2) { throw new IllegalArgumentException("Incorrect args"); }
+
+            try { Integer.parseInt(args[0]);
+            } catch (NumberFormatException e) { throw new IllegalArgumentException("Incorrect gameId format"); }
+
+        } else {
+            if (args.length != 1) { throw new IllegalArgumentException("Incorrect args"); }
         }
 
         return numberOfPlayers;
@@ -152,6 +181,7 @@ public class MainServer implements Runnable {
             System.out.println(e.getMessage());
             return;
         }
+        if (args.length == 2) { new MainServer(numberOfPlayers, Integer.parseInt(args[1])).run(); }
         new MainServer(numberOfPlayers).run();
     }
 }

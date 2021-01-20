@@ -1,20 +1,16 @@
 package appServer;
 
+import appServer.connectionDB.GameJDBCTemplate;
 import games.Change;
 import games.GameContext;
-import games.StandardGameContext;
 import games.boards.GameBoard;
 import games.boards.StandardBoard;
 import games.rules.*;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.mockito.Mockito;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -36,7 +32,7 @@ public class GameCommunicationModuleTest {
 
         communicationServiceMock = mock(ServerCommunicationService.class);
 
-        gameCommunicationModule = new GameCommunicationModule(1, gameMock, communicationServiceMock);
+        gameCommunicationModule = new GameCommunicationModule(1, gameMock, mock(GameJDBCTemplate.class), communicationServiceMock);
     }
 
     @Test

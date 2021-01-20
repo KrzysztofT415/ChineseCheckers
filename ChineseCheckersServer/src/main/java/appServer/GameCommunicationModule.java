@@ -1,5 +1,6 @@
 package appServer;
 
+import appServer.connectionDB.GameJDBCTemplate;
 import games.Change;
 import games.boards.Cell;
 import games.boards.GameBoard;
@@ -16,13 +17,15 @@ public class GameCommunicationModule implements CommunicationModule {
 
     private final Game game;
     private final int playerId;
+    private final GameJDBCTemplate gameJDBCTemplate;
     private final ServerCommunicationService communicationService;
     private Integer oldX = null, oldY = null;
     private Change[] possibleMoves;
 
-    GameCommunicationModule(int PlayerId, Game game, ServerCommunicationService communicationService) {
+    GameCommunicationModule(int PlayerId, Game game, GameJDBCTemplate gameJDBCTemplate, ServerCommunicationService communicationService) {
         this.game = game;
         this.playerId = PlayerId;
+        this.gameJDBCTemplate = gameJDBCTemplate;
         this.communicationService = communicationService;
     }
 
@@ -122,6 +125,9 @@ public class GameCommunicationModule implements CommunicationModule {
                 this.communicationService.send(setCommand);
                 this.game.resend(setCommand, playerId);
                 this.communicationService.send("CLEAR");
+
+                this.gameJDBCTemplate.save(game.getGameId(), playerId, oldX, oldY, chosenX, chosenY);
+
                 this.communicationService.send("MESSAGE Move saved");
                 this.checkWinner();
                 this.oldX = null;
