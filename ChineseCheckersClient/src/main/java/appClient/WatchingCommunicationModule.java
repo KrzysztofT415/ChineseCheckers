@@ -17,10 +17,13 @@ public class WatchingCommunicationModule implements CommunicationModule {
         }
 
         else if (response.startsWith("SET")) {
+            this.app.getAppWindow().getBoardView().clearPossibleMoves();
+            this.app.getAppWindow().getBoardView().refresh();
             int[][] gameInfo = this.resolveParameters(response.substring(4));
 
             for (int[] change : gameInfo) {
                 this.app.getAppWindow().getBoardView().updateCellState(change[0], change[1], change[2]);
+                this.app.getAppWindow().getBoardView().highlight(change[0], change[1]);
             }
         }
 

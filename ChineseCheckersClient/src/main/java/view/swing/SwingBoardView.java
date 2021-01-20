@@ -37,6 +37,20 @@ public class SwingBoardView extends JPanel implements BoardView {
         this.setSize(BOARD_WIDTH, BOARD_HEIGHT);
     }
 
+    @Override
+    public void highlight(int x, int y) {
+        Graphics2D g2d = (Graphics2D) this.getGraphics();
+        g2d.setPaint(CellState.HIGHLIGHT.getColor());
+
+        for (SwingCellView cell : allCells) {
+            if (cell.getGridX() == x && cell.getGridY() == y) {
+                g2d.fillPolygon(cell);
+                return;
+            }
+        }
+
+    }
+
     /**
      * Method that paints cell at board panel.
      * @param cell cell which is painted
@@ -128,5 +142,10 @@ public class SwingBoardView extends JPanel implements BoardView {
                 this.paintCell(cell, (Graphics2D) this.getGraphics());
             }
         }
+    }
+
+    @Override
+    public void refresh() {
+        this.repaint();
     }
 }

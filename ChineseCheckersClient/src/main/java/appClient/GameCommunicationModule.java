@@ -30,9 +30,10 @@ public class GameCommunicationModule implements CommunicationModule {
 
         else if (response.startsWith("SET")) {
             int[][] gameInfo = this.resolveParameters(response.substring(4));
-
+            this.app.getAppWindow().getBoardView().refresh();
             for (int[] change : gameInfo) {
                 this.app.getAppWindow().getBoardView().updateCellState(change[0], change[1], change[2]);
+                this.app.getAppWindow().getBoardView().highlight(change[0], change[1]);
             }
         }
 

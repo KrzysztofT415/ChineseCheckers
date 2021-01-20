@@ -14,6 +14,7 @@ public enum CellState {
     PLAYER5(new Color(171,54,143)),
     PLAYER6(new Color(120, 84, 61)),
     POSSIBLE_MOVE(new Color(255,236,81)),
+    HIGHLIGHT(new Color(255, 71, 71, 40)),
     WHITE(Color.white);
 
     private final Color color;

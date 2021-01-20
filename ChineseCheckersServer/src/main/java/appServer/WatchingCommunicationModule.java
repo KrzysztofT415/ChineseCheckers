@@ -62,8 +62,10 @@ public class WatchingCommunicationModule implements CommunicationModule {
     @Override
     public int execute(String command) {
         if (command.startsWith("NEXT")) {
+            this.communicationService.send("CLEAR");
             this.communicationService.send(this.move(1));
         } else if (command.startsWith("BACK")) {
+            this.communicationService.send("CLEAR");
             this.communicationService.send(this.move(-1));
         } else if (command.startsWith("QUIT")) {
             return 1;
@@ -74,13 +76,17 @@ public class WatchingCommunicationModule implements CommunicationModule {
     private String move(int i) {
         this.currentEntryId += i;
         if (i < 0) {
-            if (currentEntryId < startingEntryId - 1) { currentEntryId = startingEntryId - 1; }
+            if (currentEntryId < startingEntryId - 1) {
+                this.communicationService.send("BEGIN");
+                currentEntryId = startingEntryId - 1; }
             GameEntry ge = gameEntries.get(currentEntryId + 1);
-            return "SET 2;" + ge.getX1() + ";" + ge.getY1() + ";" + ge.getPlayerId() + ";" + ge.getX2() + ";" + ge.getY2() + ";0";
+            return "SET 2;" + ge.getX1() + ";" + ge.getY1() + ";" + ge.getPlayerId() + ";" + ge.getX2() + ";" + ge.getY2() + ";7";
         } else {
-            if (currentEntryId > lastEntryId) { currentEntryId = lastEntryId; }
+            if (currentEntryId > lastEntryId) {
+                this.communicationService.send("END");
+                currentEntryId = lastEntryId; }
             GameEntry ge = gameEntries.get(currentEntryId);
-            return "SET 2;" + ge.getX1() + ";" + ge.getY1() + ";0;" + ge.getX2() + ";" + ge.getY2() + ";" + ge.getPlayerId();
+            return "SET 2;" + ge.getX1() + ";" + ge.getY1() + ";7;" + ge.getX2() + ";" + ge.getY2() + ";" + ge.getPlayerId();
         }
     }
 }

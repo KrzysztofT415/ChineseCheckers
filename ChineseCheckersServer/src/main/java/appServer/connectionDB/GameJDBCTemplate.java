@@ -6,11 +6,9 @@ import javax.sql.DataSource;
 import java.util.List;
 
 public class GameJDBCTemplate {
-    private DataSource dataSource;
     private JdbcTemplate jdbcTemplateObject;
 
     public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
     }
 
