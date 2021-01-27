@@ -5,7 +5,7 @@
 
     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
-        <property name="url" value="jdbc:mysql://localhost:3306/chinesecheckers?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC&amp;sslMode=DISABLED"/>
+        <property name="url" value="jdbc:mysql://77.254.230.120:3306/chinesecheckers?useUnicode=true&amp;useJDBCCompliantTimezoneShift=true&amp;useLegacyDatetimeCode=false&amp;serverTimezone=UTC&amp;sslMode=DISABLED&amp;allowPublicKeyRetrieval=true"/>
         <property name="username" value="USER"/>
         <property name="password" value="qwe123"/>
     </bean>

@@ -88,7 +88,7 @@ public class MainServer implements Runnable {
     @Override
     public void run() {
         try {
-            int port = new Random().nextInt(10000);
+            int port = 1313;
 
             String ip;
             try(final DatagramSocket socket = new DatagramSocket()) {
