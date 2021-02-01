@@ -4,6 +4,7 @@ import appServer.connectionDB.GameJDBCTemplate;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
+import javax.swing.*;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -150,7 +151,6 @@ public class MainServer implements Runnable {
      * @throws IllegalArgumentException when arguments are incorrect
      */
     public static int verifyArguments(String[] args) throws IllegalArgumentException {
-        if (args.length != 1 && args.length != 2) { throw new IllegalArgumentException("Incorrect number of arguments"); }
 
         int numberOfPlayers;
         try { numberOfPlayers = Integer.parseInt(args[0]);
@@ -161,13 +161,11 @@ public class MainServer implements Runnable {
         }
 
         if (numberOfPlayers == 1) {
-            if (args.length != 2) { throw new IllegalArgumentException("Incorrect args"); }
+            if (args[1] == null) { throw new IllegalArgumentException("Incorrect args"); }
 
             try { Integer.parseInt(args[0]);
             } catch (NumberFormatException e) { throw new IllegalArgumentException("Incorrect gameId format"); }
 
-        } else {
-            if (args.length != 1) { throw new IllegalArgumentException("Incorrect args"); }
         }
 
         return numberOfPlayers;
@@ -178,12 +176,21 @@ public class MainServer implements Runnable {
      */
     public static void main(String[] args) {
         int numberOfPlayers;
+        String nm = JOptionPane.showInputDialog("Choose number of players (1,2,3,4,6) :");
+        String id = null;
+        if (nm == null) { System.exit(1); }
+        if (nm.equals("1")) {
+            id = JOptionPane.showInputDialog("Choose id of game :");
+        }
+
+        args = new String[] {nm, id};
+
         try { numberOfPlayers = MainServer.verifyArguments(args); }
         catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             return;
         }
-        if (args.length == 2) { new MainServer(numberOfPlayers, Integer.parseInt(args[1])).run(); }
+        if (args[1] != null) { new MainServer(numberOfPlayers, Integer.parseInt(args[1])).run(); }
         new MainServer(numberOfPlayers).run();
     }
 
