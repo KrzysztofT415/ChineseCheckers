@@ -2,27 +2,44 @@ package appServer;
 
 import appServer.connectionDB.GameEntry;
 import appServer.connectionDB.GameJDBCTemplate;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.List;
 
 public class WatchingCommunicationModule implements CommunicationModule {
 
-    private final int gameId;
-    private final GameJDBCTemplate gameJDBCTemplate;
-    private final ServerCommunicationService communicationService;
+    private int gameId;
+    private GameJDBCTemplate gameJDBCTemplate;
+
+    private ServerCommunicationService communicationService;
+    private final ApplicationContext context;
 
     private StringBuilder startingBoard;
 
-    private final List<GameEntry> gameEntries;
+    private List<GameEntry> gameEntries;
 
     private int startingEntryId = 0;
-    private final int lastEntryId;
+    private int lastEntryId;
     private int currentEntryId;
 
-    WatchingCommunicationModule(int gameId, GameJDBCTemplate gameJDBCTemplate, ServerCommunicationService communicationService) {
-        this.gameId = gameId;
-        this.gameJDBCTemplate = gameJDBCTemplate;
+    public void setCommunicationService(ServerCommunicationService communicationService) {
         this.communicationService = communicationService;
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
+
+    public void setGameJDBCTemplate(GameJDBCTemplate gameJDBCTemplate) {
+        this.gameJDBCTemplate = gameJDBCTemplate;
+    }
+
+    WatchingCommunicationModule(int gameId, ServerCommunicationService communicationService) {
+        this.gameId = gameId;
+        this.communicationService = communicationService;
+        this.context = new ClassPathXmlApplicationContext("Beans.xml");
+        this.gameJDBCTemplate = (GameJDBCTemplate) context.getBean("gameJDBCTemplate");
         this.gameEntries = gameJDBCTemplate.getGameInformation(gameId);
 
         for (int i = 0; i < gameEntries.size(); i++) {

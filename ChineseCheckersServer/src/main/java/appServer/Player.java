@@ -13,11 +13,21 @@ class Player implements User {
     private final Game game;
     private final ServerCommunicationService communicationService;
 
-    public Player(int playerId, Game game, GameJDBCTemplate gameJDBCTemplate, Socket socket) {
+    public Player(int playerId, Game game, Socket socket) {
         this.playerId = playerId;
         this.game = game;
-        this.communicationService = new ServerCommunicationService(playerId, socket);
-        this.communicationService.connectModule(new GameCommunicationModule(playerId, game, gameJDBCTemplate, communicationService));
+        //this.communicationService = new ServerCommunicationService(playerId, socket);
+        this.communicationService = new ServerCommunicationService();
+        this.communicationService.setPlayerId(playerId);
+        this.communicationService.setSocket(socket);
+
+        //this.communicationService.connectModule(new GameCommunicationModule(playerId, game, communicationService));
+        GameCommunicationModule communicationModule = new GameCommunicationModule();
+        communicationModule.setCommunicationService(communicationService);
+        communicationModule.setPlayerId(playerId);
+        communicationModule.setGame(game);
+        this.communicationService.connectModule(communicationModule);
+
     }
 
     /**
@@ -48,4 +58,5 @@ class Player implements User {
     public ServerCommunicationService getCommunicationService() {
         return communicationService;
     }
+
 }

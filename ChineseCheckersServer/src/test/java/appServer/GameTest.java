@@ -1,7 +1,6 @@
 package appServer;
 
 import appServer.connectionDB.GameJDBCTemplate;
-import games.StandardGameContext;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +16,7 @@ public class GameTest {
 
     @Before
     public void setUp() throws Exception {
-        game = new Game(2, mock(GameJDBCTemplate.class), 2);
+        game = new Game();
         communicationService = mock(ServerCommunicationService.class);
         player1 = mock(Player.class);
         player2 = mock(Player.class);
@@ -45,10 +44,6 @@ public class GameTest {
        Assert.assertEquals(1, game.getWinners());
     }
 
-    @Test
-    public void testGetGameContext() {
-        Assert.assertEquals( StandardGameContext.class,game.getGameContext().getClass());
-    }
 
     @Test
     public void testGetCurrentPlayerId() {

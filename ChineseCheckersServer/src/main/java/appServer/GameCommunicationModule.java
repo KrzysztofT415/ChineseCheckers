@@ -7,6 +7,8 @@ import games.boards.GameBoard;
 import games.rules.FilterRule;
 import games.rules.MoveOneRule;
 import games.rules.MoveRule;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.ArrayList;
 
@@ -15,19 +17,37 @@ import java.util.ArrayList;
  */
 public class GameCommunicationModule implements CommunicationModule {
 
-    private final Game game;
-    private final int playerId;
-    private final GameJDBCTemplate gameJDBCTemplate;
-    private final ServerCommunicationService communicationService;
+    private Game game;
+    private int playerId;
+    private GameJDBCTemplate gameJDBCTemplate;
+    private ServerCommunicationService communicationService;
     private Integer oldX = null, oldY = null;
     private Change[] possibleMoves;
 
-    GameCommunicationModule(int PlayerId, Game game, GameJDBCTemplate gameJDBCTemplate, ServerCommunicationService communicationService) {
-        this.game = game;
-        this.playerId = PlayerId;
-        this.gameJDBCTemplate = gameJDBCTemplate;
+    public void setCommunicationService(ServerCommunicationService communicationService) {
         this.communicationService = communicationService;
     }
+
+    public void setGameJDBCTemplate(GameJDBCTemplate gameJDBCTemplate) {
+        this.gameJDBCTemplate = gameJDBCTemplate;
+    }
+
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
+    }
+    //private final ApplicationContext context;
+
+    /*GameCommunicationModule(int PlayerId, Game game, ServerCommunicationService communicationService) {
+        this.game = game;
+        this.playerId = PlayerId;
+        this.context = new ClassPathXmlApplicationContext("Beans.xml");
+        this.gameJDBCTemplate = (GameJDBCTemplate) context.getBean("gameJDBCTemplate");
+        this.communicationService = communicationService;
+    }*/
 
     /**
      * Method responsible for identifying and handling messages received from clients.

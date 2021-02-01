@@ -14,4 +14,40 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
+    <bean id="standardBoard" class="games.boards.StandardBoard"/>
+    <bean id="moveOneRule" class="games.rules.MoveOneRule"/>
+    <bean id="smallJumpRule" class="games.rules.SmallJumpRule"/>
+    <bean id="finalCornerRule" class="games.rules.NotLeaveFinalCornerRule"/>
+
+    <bean id="gameContext" class="games.GameContext">
+        <property name="board" ref="standardBoard"/>
+        <property name="rules">
+            <list>
+                <ref bean="smallJumpRule"/>
+                <ref bean="moveOneRule"/>
+                <ref bean="finalCornerRule"/>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="game" class="appServer.Game">
+        <property name="gameId" value="0"/>
+        <property name="numberOfPlayers" value="0"/>
+        <property name="gameContext" ref="gameContext"/>
+        <property name="gameJDBCTemplate" ref="gameJDBCTemplate"/>
+    </bean>
+
+    <bean name="socket" class="java.net.Socket"/>
+
+    <bean id="communicationService" class="appServer.ServerCommunicationService">
+        <property name="playerId" value="0"/>
+    </bean>
+
+    <bean id="gameCommunicationModule" class="appServer.GameCommunicationModule">
+        <property name="playerId" value="0"/>
+        <property name="game" ref="game"/>
+        <property name="communicationService" ref="communicationService"/>
+        <property name="gameJDBCTemplate" ref="gameJDBCTemplate"/>
+    </bean>
+
 </beans>

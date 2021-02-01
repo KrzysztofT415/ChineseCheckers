@@ -10,14 +10,27 @@ import java.util.Scanner;
  */
 public class ServerCommunicationService {
 
-    private final int playerId;
+    private int playerId;
 
     private Scanner in;
     private PrintWriter out;
 
     private CommunicationModule communicationModule;
 
-    public ServerCommunicationService(int playerId, Socket socket) {
+    public void setPlayerId(int playerId) {
+        this.playerId = playerId;
+    }
+
+    public void setSocket(Socket socket) {
+        try {
+            this.in = new Scanner(socket.getInputStream());
+            this.out = new PrintWriter(socket.getOutputStream(), true);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /*public ServerCommunicationService(int playerId, Socket socket) {
         this.playerId = playerId;
 
         try {
@@ -26,7 +39,7 @@ public class ServerCommunicationService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
     /**
      * Method to set the right CommunicationModule which is responsible for processing messages

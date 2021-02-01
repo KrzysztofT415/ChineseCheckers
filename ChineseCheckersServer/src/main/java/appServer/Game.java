@@ -2,28 +2,48 @@ package appServer;
 
 import appServer.connectionDB.GameJDBCTemplate;
 import games.GameContext;
-import games.StandardGameContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.Random;
 
 /**
  * Class contains and handles information about players
  */
-class Game {
+public class Game {
+
+
+    private GameContext gameContext;
+
     private GameJDBCTemplate gameJDBCTemplate;
     private int gameId;
 
-    private final Player[] players;
-    private final GameContext gameContext;
+    private Player[] players;
     private Player currentPlayer;
+    private int numberOfPlayers;
+
     private int winners = 0;
 
-    public Game(int gameId, GameJDBCTemplate gameJDBCTemplate, int numberOfPlayers) {
-        this.gameId = gameId;
+    public void setGameContext(GameContext gameContext) {
+        this.gameContext = gameContext;
+    }
+
+    public void setGameJDBCTemplate(GameJDBCTemplate gameJDBCTemplate) {
         this.gameJDBCTemplate = gameJDBCTemplate;
+    }
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
+
+    public void setNumberOfPlayers(int numberOfPlayers) {
+        this.numberOfPlayers = numberOfPlayers;
+    }
+
+    public void handlePlayers() {
         this.players = new Player[numberOfPlayers];
-        this.gameContext = new StandardGameContext();
-        this.gameContext.getBoard().placePlayers(numberOfPlayers);
+        gameContext.getBoard().placePlayers(numberOfPlayers);
     }
 
     /**
@@ -125,4 +145,5 @@ class Game {
     public int getGameId() {
         return gameId;
     }
+
 }

@@ -59,7 +59,7 @@ import java.util.concurrent.Executors;
 public class MainServer implements Runnable {
 
     private int gameId;
-    private final int lobbySize;
+    private int lobbySize;
 
     private final ApplicationContext applicationContext;
     private final GameJDBCTemplate gameJDBCTemplate;
@@ -67,7 +67,6 @@ public class MainServer implements Runnable {
     /**
      * Acts as lobby for players. Waits until all players are connected.
      * After all players joined sends information about game starting to all clients.
-     * @param lobbySize number of players to join
      */
     public MainServer(int lobbySize) {
         this.lobbySize = lobbySize;
@@ -79,6 +78,7 @@ public class MainServer implements Runnable {
         this(lobbySize);
         this.gameId = gameId;
     }
+
 
     /**
      * Runs the lobby on localhost and random port.
@@ -105,7 +105,7 @@ public class MainServer implements Runnable {
 
                 if (lobbySize == 1) {
                     System.out.println("Waiting for player who want to watch game to connect");
-                    Spectator spectator = new Spectator(gameId, gameJDBCTemplate, listener.accept());
+                    Spectator spectator = new Spectator(gameId, listener.accept());
                     pool.execute(spectator);
                     System.out.println("Player connected - started displaying game");
 
@@ -113,17 +113,19 @@ public class MainServer implements Runnable {
                     spectator.sendStartingBoard();
 
                 } else {
-
                     gameJDBCTemplate.addNewGame(ip);
                     this.gameId = gameJDBCTemplate.getNewGameId(ip).getGameId();
+                        Game game = (Game) applicationContext.getBean("game");
+                        game.setNumberOfPlayers(lobbySize);
+                        game.setGameId(gameId);
+                        game.handlePlayers();
 
-                    Game game = new Game(gameId, gameJDBCTemplate, lobbySize);
                     System.out.println("New game created - lobby size : " + lobbySize);
 
                     for (int i = 1; i <= lobbySize; i++) {
                         System.out.println("Waiting for player " + i);
 
-                        Player newPlayer = new Player(i, game, gameJDBCTemplate, listener.accept());
+                        Player newPlayer = new Player(i, game, listener.accept());
                         game.connectPlayer(newPlayer, i - 1);
                         pool.execute(newPlayer);
 
@@ -184,4 +186,5 @@ public class MainServer implements Runnable {
         if (args.length == 2) { new MainServer(numberOfPlayers, Integer.parseInt(args[1])).run(); }
         new MainServer(numberOfPlayers).run();
     }
+
 }

@@ -6,14 +6,26 @@ import java.net.Socket;
 
 public class Spectator implements User {
 
-    private final ServerCommunicationService communicationService;
-    private final WatchingCommunicationModule watchingCommunicationModule;
+    private ServerCommunicationService communicationService;
+    private WatchingCommunicationModule watchingCommunicationModule;
 
-    public Spectator(int gameId, GameJDBCTemplate gameJDBCTemplate, Socket socket) {
-        this.communicationService = new ServerCommunicationService(1, socket);
-        this.watchingCommunicationModule = new WatchingCommunicationModule(gameId, gameJDBCTemplate, communicationService);
+
+    public Spectator(int gameId, Socket socket) {
+        //this.communicationService = new ServerCommunicationService(1, socket);
+
+        this.communicationService = new ServerCommunicationService();
+        this.communicationService.setPlayerId(1);
+        this.communicationService.setSocket(socket);
+
+
+        //this.watchingCommunicationModule = new WatchingCommunicationModule(gameId, communicationService);
+
+        this.watchingCommunicationModule = new WatchingCommunicationModule(gameId, communicationService);
+        //this.watchingCommunicationModule.setGameId(gameId);
+        //this.watchingCommunicationModule.setCommunicationService(communicationService);
         this.communicationService.connectModule(watchingCommunicationModule);
     }
+
 
     @Override
     public void run() {
