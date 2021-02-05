@@ -21,12 +21,12 @@ class Player implements User {
         this.communicationService.setPlayerId(playerId);
         this.communicationService.setSocket(socket);
 
-        //this.communicationService.connectModule(new GameCommunicationModule(playerId, game, communicationService));
-        GameCommunicationModule communicationModule = new GameCommunicationModule();
-        communicationModule.setCommunicationService(communicationService);
+        this.communicationService.connectModule(new GameCommunicationModule(playerId, game, communicationService));
+        //GameCommunicationModule communicationModule = new GameCommunicationModule();
+        /*communicationModule.setCommunicationService(communicationService);
         communicationModule.setPlayerId(playerId);
         communicationModule.setGame(game);
-        this.communicationService.connectModule(communicationModule);
+        this.communicationService.connectModule(communicationModule);*/
 
     }
 

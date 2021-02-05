@@ -43,11 +43,6 @@
         <property name="playerId" value="0"/>
     </bean>
 
-    <bean id="gameCommunicationModule" class="appServer.GameCommunicationModule">
-        <property name="playerId" value="0"/>
-        <property name="game" ref="game"/>
-        <property name="communicationService" ref="communicationService"/>
-        <property name="gameJDBCTemplate" ref="gameJDBCTemplate"/>
-    </bean>
+
 
 </beans>

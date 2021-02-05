@@ -39,15 +39,15 @@ public class GameCommunicationModule implements CommunicationModule {
     public void setGame(Game game) {
         this.game = game;
     }
-    //private final ApplicationContext context;
+    private final ApplicationContext context;
 
-    /*GameCommunicationModule(int PlayerId, Game game, ServerCommunicationService communicationService) {
+    GameCommunicationModule(int PlayerId, Game game, ServerCommunicationService communicationService) {
         this.game = game;
         this.playerId = PlayerId;
         this.context = new ClassPathXmlApplicationContext("Beans.xml");
         this.gameJDBCTemplate = (GameJDBCTemplate) context.getBean("gameJDBCTemplate");
         this.communicationService = communicationService;
-    }*/
+    }
 
     /**
      * Method responsible for identifying and handling messages received from clients.

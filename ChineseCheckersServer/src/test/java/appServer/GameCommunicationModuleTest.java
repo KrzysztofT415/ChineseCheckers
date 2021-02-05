@@ -32,8 +32,8 @@ public class GameCommunicationModuleTest {
 
         communicationServiceMock = mock(ServerCommunicationService.class);
 
-        //gameCommunicationModule = new GameCommunicationModule(1, gameMock, communicationServiceMock);
-        gameCommunicationModule = new GameCommunicationModule();
+        gameCommunicationModule = new GameCommunicationModule(1, gameMock, communicationServiceMock);
+        //gameCommunicationModule = new GameCommunicationModule();
         gameCommunicationModule.setGame(gameMock);
         gameCommunicationModule.setCommunicationService(communicationServiceMock);
         gameCommunicationModule.setPlayerId(1);
